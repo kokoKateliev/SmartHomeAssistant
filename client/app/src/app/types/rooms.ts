@@ -1,0 +1,1 @@
+export type Room = "Kitchen" | "Living Room" | "Dining Room" | "Bed Room"

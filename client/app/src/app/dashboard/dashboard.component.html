@@ -1,0 +1,44 @@
+<app-navigation />
+<main>
+    <section>
+        <h3>Working Machines</h3>
+        <ul *ngFor="let todos of todoList">
+           <h1>{{todos.member}}'s tasks:</h1>
+           <li *ngFor="let todo of todos.todos">
+            At {{todo.time}} - {{todo.todo}}
+            </li>
+        </ul>
+    </section>
+    <section>
+        <!-- working Machines -->
+    </section>
+    <div>
+        <nav>
+            <ul>
+                @for(room of roomList; track roomList) {
+                    <li (click)="changeRoomHandler(room)">{{room}}</li>
+                } @empty {
+                    <li> No rooms added </li>
+                }
+            </ul>
+        </nav>
+        <section>
+            <h3>Working Machines</h3>
+            <ul>
+                @if(room) {
+                    @for(device of workingMachines; track roomList) {
+                        <li>{{device.name}}</li>
+                    } @empty {
+                        <li> There aren't any working machines in {{room}} </li>
+                    }
+                }
+                @else {
+                    <li> It is not selected a room to be shown. </li>
+                }
+            </ul>
+        </section>
+        <section>
+            <app-clock />
+        </section>
+    </div>
+</main>
