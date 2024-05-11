@@ -5,13 +5,14 @@ import { CommonModule } from '@angular/common';
 import { IDevice } from '../types/device';
 import { Room } from '../types/rooms';
 import { ClockComponent } from '../clock/clock.component';
+import { WeatherComponent } from '../weather/weather.component';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
-    imports: [NavigationComponent, ClockComponent, CommonModule]
+    imports: [NavigationComponent, ClockComponent, CommonModule, WeatherComponent]
 })
 export class DashboardComponent {
     todoList: ITodos[] = [
