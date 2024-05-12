@@ -6,6 +6,19 @@ export type ITodo = {
 }
 
 export type ITodos = {
-    member: FamilyMembers;
+    
+    member: string;
     todos: ITodo[];
 }
+
+// Option two
+export interface Todo {
+    time: Date;
+    todo: string;
+  }
+  
+export  interface Todos {
+    [key: string]: {
+      todos: Todo[];
+    };
+  }

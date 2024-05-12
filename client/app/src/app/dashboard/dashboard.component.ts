@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationComponent } from "../navigation/navigation.component";
-import { ITodos, ITodo } from '../types/todos';
+import { ITodos, ITodo, Todos } from '../types/todos';
 import { CommonModule } from '@angular/common';
 import { IDevice } from '../types/device';
 import { Room } from '../types/rooms';
 import { ClockComponent } from '../clock/clock.component';
 import { WeatherComponent } from '../weather/weather.component';
+import { TodoService } from '../services/todos/todo.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -15,36 +16,13 @@ import { WeatherComponent } from '../weather/weather.component';
     imports: [NavigationComponent, ClockComponent, CommonModule, WeatherComponent]
 })
 export class DashboardComponent {
-    todoList: ITodos[] = [
-        {
-            member: "Mom",
-            todos: [
-                {
-                    time: new Date(),
-                    todo: "test 1",
-                },
-                {
-                    time: new Date(),
-                    todo: "test 2",
-                },
-                {
-                    time: new Date(),
-                    todo: "test 3",
-                },
-                {
-                    time: new Date(),
-                    todo: "test 4",
-                },
-                {
-                    time: new Date(),
-                    todo: "test 5",
-                },
+    todosService = inject(TodoService);
+    
+    //to be changed
+    
+    todoList: ITodos[] = this.todosService.getListOfAllTodos();
+    
 
-             ]
-        }
-    ];
-    
-    
     //inject rooms
     roomList: Room[] = [ "Living Room", "Kitchen", "Bed Room", "Dining Room"]
     room: Room | null = this.roomList.length > 0 ? this.roomList[0] : null; // default to be the first room or null
