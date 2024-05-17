@@ -1,0 +1,21 @@
+<p>todos works!</p>
+<div class="container">
+    @for(member of members; track members){
+        <div class="member-container">
+            <h3>{{member}}</h3>
+            <a [routerLink]="[member]"> + </a>
+            @for(todo of todos[member]; track todos){
+                <p>
+                    {{todo.time | date: "hh:mm:ss a" }}
+                    -
+                    {{todo.todo}}
+                    
+                </p>
+            }
+        </div>
+    }
+</div>
+
+<div>
+    <router-outlet></router-outlet>
+</div>

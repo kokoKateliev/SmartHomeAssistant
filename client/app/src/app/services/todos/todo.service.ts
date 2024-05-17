@@ -1,59 +1,77 @@
-import { Injectable } from '@angular/core';
-import { ITodos, Todos } from '../../types/todos';
+import { Injectable, inject } from '@angular/core';
+import { ITodos, Todos, Todo } from '../../types/todos';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
 
+  httpClient = inject(HttpClient);
+
   todos: Todos = {
-    mother: {
-      todos: [
+    mother: [
         {
           time: new Date(),
-          todo: "test 1"
-        }
-      ]
-    },
-    father: {
-      todos: [
+          todo: "test 1",
+          isDone: false,
+        },
         {
           time: new Date(),
-          todo: "test 2"
+          todo: "test 2",
+          isDone: false,
         }
-      ]
-    },
-    sister: {
-      todos: []
-    },
-    brother: {
-      todos: [
+      ],
+    father: [
         {
           time: new Date(),
-          todo: "test 3"
+          todo: "test 2",
+          isDone: false,
+        }
+      ],
+    sister: [],
+    brother: [
+        {
+          time: new Date(),
+          todo: "test 3",
+          isDone: false,
         }
       ]
-    }
   };
+
+  members = Object.keys(this.todos as object);
+
+  private url = 'https://localhost:8080';
 
   constructor() {
     this.loadTodos();
   }
 
   loadTodos() {
-    // fetch
+    // const url = `${this.url}/todos`;
+    // return this.httpClient.get<Todos[]>(url);
+    return of(this.todos)
   }
 
   getTodos(){
     return this.todos;
   }
 
+  getMembers(){
+    return this.members;
+  }
+
   getTodosOf(member: string){
-    return 
+    return of(this.todos[member]);
   }
 
   addTodo(){
 
+  }
+
+  addTodoTo(member: string, td: Todo){
+    this.todos[member].push(td);
   }
 
   removeTodo(todo: string){
@@ -69,7 +87,7 @@ export class TodoService {
     todoMembers.forEach(user => {
         todos.push({
             member: user,
-            todos: todosList[user].todos
+            todos: todosList[user]
         })
     });
 

@@ -1,0 +1,9 @@
+.container{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.member-container{
+    display: flex;
+    flex-direction: column;
+}

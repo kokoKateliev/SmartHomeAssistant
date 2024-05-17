@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { TodosComponent } from './todos/todos.component';
+import { TodoDialogComponent } from './todos/todo-dialog/todo-dialog.component';
 
 export const routes: Routes = [
     // {
@@ -36,21 +38,18 @@ export const routes: Routes = [
     //  },
     // },
 
-    // {
-    //     path: 'todos',
-    //     // canActivate: [authGuard],
-    //     children: [
-    //         {
-    //           path: '',
-    //           pathMatch: 'full',
-    //           component: TodosComponent,
-    //         },
-    //         {
-    //           path: ':id',
-    //           component: TodosUserComponent,
-    //         },
-    //       ],
-    // },
+    {
+        path: 'todos',
+        // canActivate: [authGuard],
+        component: TodosComponent,
+
+        children: [
+            {
+              path: ':member',
+              component: TodoDialogComponent,
+            },
+          ],
+    },
 
     // {
     //     path: 'assistant',
