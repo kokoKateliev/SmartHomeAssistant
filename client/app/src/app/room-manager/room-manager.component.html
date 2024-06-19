@@ -6,8 +6,7 @@
 
 <div class="room-details-container">
     @if(selectedRoom !== null) {
-        <!-- <app-room-detail [room]="selectedRoom"></app-room-detail> -->
-        <div><p>Selected {{selectedRoom}}</p></div>
+        <app-room-detail [room]="selectedRoom"></app-room-detail>
     }
     @else {
         <div><p>No selected items</p></div>   

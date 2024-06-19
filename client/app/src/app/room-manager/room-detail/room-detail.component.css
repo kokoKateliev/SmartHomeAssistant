@@ -1,0 +1,13 @@
+.controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  #room {
+    position: relative;
+  }
+  svg {
+    display: block;
+    margin: auto;
+  }
+  
