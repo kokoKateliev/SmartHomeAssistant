@@ -1,7 +1,10 @@
+import { UUID } from "crypto";
+
 export interface Device {
     name: string;
-    device_id: number;
+    device_id: UUID;
     power_status: boolean;
+    time_start: Date;
     position: {
         x?: number;
         y?: number;
@@ -10,8 +13,6 @@ export interface Device {
       color?: string;
       temperature?: number;
       mode?: string;
-      time_end?: string;
-      mode_time?: string;
     };
   }
   
