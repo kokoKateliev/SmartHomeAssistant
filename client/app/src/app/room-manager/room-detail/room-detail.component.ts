@@ -18,7 +18,7 @@ interface ElementData {
 })
 export class RoomDetailComponent {
   @Input() room!: Room | null;
-  devices = [/* данни за устройствата */];
+  devices = [/* */];
   selectedDevice = null;
 
   private svg: any;
@@ -89,17 +89,16 @@ export class RoomDetailComponent {
       .attr('x', -15)
       .attr('y', -15);
 
-    // Запазване на елемента в масива
     this.elementsData.push({
       x: x,
       y: y,
       type: this.selectedElement,
-      state: this.selectedElement === 'lamp' ? 'off' : 'on' // Начално състояние
+      state: this.selectedElement === 'lamp' ? 'off' : 'on'
     });
 
     this.saveElements();
 
-    this.selectedElement = null;  // Ресетиране на избора след добавяне на елемент
+    this.selectedElement = null;  
   }
 
   private switchOn(element: any): void {
@@ -108,7 +107,6 @@ export class RoomDetailComponent {
     const newColor = currentColor === 'yellow' ? 'green' : 'yellow';
     circle.attr('fill', newColor);
 
-    // Актуализиране на състоянието в масива
     const parentTransform = d3.select(element.parentNode).attr('transform');
     const [x, y] = parentTransform.replace('translate(', '').replace(')', '').split(',').map(Number);
 
@@ -134,7 +132,6 @@ export class RoomDetailComponent {
             .on('drag', (event: any) => {
               d3.select(event.sourceEvent.target.parentNode)
                 .attr('transform', `translate(${event.x},${event.y})`);
-              // Актуализиране на координатите в масива
               data.x = event.x;
               data.y = event.y;
               this.saveElements();
