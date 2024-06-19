@@ -1,0 +1,45 @@
+/* * {
+    width: 100%;
+} */
+
+.room-buttons-container {
+    display: flex;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    width: 98%; 
+    padding: 1%;
+
+    margin-bottom: 3%;
+    background-color: #222222;
+    border-radius: 15px;
+}
+
+.room-buttons-container button {
+    background-color: #414141;
+    color: #E4E6EB;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    padding: 1% 2%;
+    border-radius: 40px;
+    transition: 0.5s ease;
+    margin-right: 2%;
+
+}
+
+
+.room-buttons-container button:hover {
+    background-color: #636363;
+    transform: scale(1.1);
+}
+
+.room-details-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 96%;
+    padding: 2%;
+    background-color: #222222;
+    border-radius: 15px;
+}
+

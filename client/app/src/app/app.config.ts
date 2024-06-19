@@ -2,13 +2,13 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
-import { TodoService } from './services/todos/todo.service';
+// import { provideClientHydration } from '@angular/platform-browser';
+// import { TodoService } from './services/todos/todo.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 const localProviders = [
-  TodoService
+  // TodoService
 ]
 
 export const appConfig: ApplicationConfig = {
@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(CommonModule),
-    ...localProviders
+    // ...localProviders
   ]
 };

@@ -1,0 +1,15 @@
+<div class="room-buttons-container">
+    @for(room of rooms; track room) {
+        <button (click)="selectRoom(room)">{{room.name}}</button>
+    }
+</div>
+
+<div class="room-details-container">
+    @if(selectedRoom !== null) {
+        <!-- <app-room-detail [room]="selectedRoom"></app-room-detail> -->
+        <div><p>Selected {{selectedRoom}}</p></div>
+    }
+    @else {
+        <div><p>No selected items</p></div>   
+    }
+</div>

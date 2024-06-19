@@ -1,18 +1,16 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { TodosComponent } from './todos/todos.component';
-import { TodoDialogComponent } from './todos/todo-dialog/todo-dialog.component';
+import { RoomManagerComponent } from './room-manager/room-manager.component';
 
 export const routes: Routes = [
     // {
     //     path: '',
     //     pathMatch: 'full',
-    //     redirectTo: 'dashboard',
+    //     redirectTo: 'home',
     // },
     {
-    path: 'dashboard',
+    path: 'rooms',
     // canActivate: [authGuard],
-    component: DashboardComponent
+    component: RoomManagerComponent
     },
     // {
     //     path: 'profile',
@@ -36,31 +34,6 @@ export const routes: Routes = [
     // data: {
     //     notAuthenticatedRequired: true,
     //  },
-    // },
-
-    {
-        path: 'todos',
-        // canActivate: [authGuard],
-        component: TodosComponent,
-
-        children: [
-            {
-              path: ':member',
-              component: TodoDialogComponent,
-            },
-          ],
-    },
-
-    // {
-    //     path: 'assistant',
-    //     // canActivate: [authGuard],
-    //     component: HomeAssistantComponent
-    // },
-
-    // {
-    //     path: 'Schedular',
-    //     // canActivate: [authGuard],
-    //     component: SchedularComponent
     // },
 
     // {

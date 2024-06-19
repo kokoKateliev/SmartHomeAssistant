@@ -1,15 +1,31 @@
-.svg-icon {
-    width: 1em;
-    height: 1em;
-  }
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  height: 90vh;
+  width: 100%;
+
+  background-color: #222222;
+  border-radius: 15px;
+  /* margin-right: 5%; */
+  padding: 20% 0;
+}
+
+
+div {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main-buttons {
+  height: 15%;
+}
+
+.bottom-buttons {
+  height: 10%;
   
-  .svg-icon path,
-  .svg-icon polygon,
-  .svg-icon rect {
-    fill: #4691f6;
-  }
-  
-  .svg-icon circle {
-    stroke: #4691f6;
-    stroke-width: 1;
-  }
+}
+
