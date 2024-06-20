@@ -1,0 +1,48 @@
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5%;
+    width: 100%;
+}
+  #room {
+    position: relative;
+    /* background-color: red; */
+    width: 50%;
+    margin: 0;
+  }
+
+  svg {
+    display: block;
+    margin: auto;
+  }
+  
+
+  .controls button {
+    background-color: #414141;
+    color: #E4E6EB;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    padding: 1% 2%;
+    border-radius: 40px;
+    transition: 0.5s ease;
+    margin-right: 2%;
+
+}
+
+
+.controls button:hover {
+    background-color: #636363;
+    transform: scale(1.1);
+}
+
+.main { 
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+app-device-controller { 
+  width:  30%;
+  display: flex;
+}
