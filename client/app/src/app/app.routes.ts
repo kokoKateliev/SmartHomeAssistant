@@ -3,8 +3,9 @@ import { Routes } from '@angular/router';
 // import { TodosComponent } from './todos/todos.component';
 // import { TodoDialogComponent } from './todos/todo-dialog/todo-dialog.component';
 // import { SchedularComponent } from './schedular/schedular.component';
-import { RoomManagerComponent } from './room-manager/room-manager.component';
-import { RoomDetailComponent } from './room-manager/room-detail/room-detail.component';
+import { RoomManagerComponent } from './components/room-manager/room-manager.component';
+import { RoomDetailComponent } from './components/room-detail/room-detail.component';
+import { DeviceControllerComponent } from './components/device-controller/device-controller.component';
 // import { ManagerComponent } from './manager/manager.component';
 
 export const routes: Routes = [
@@ -19,8 +20,14 @@ export const routes: Routes = [
     component: RoomManagerComponent,
     children: [
                 {
-                  path: ':room',
+                  path: ':id',
                   component: RoomDetailComponent,
+                  // children: [
+                  //   {
+                  //     path: ':controller',
+                  //     component: DeviceControllerComponent
+                  //   }
+                  // ]
                 },
       ],
     },

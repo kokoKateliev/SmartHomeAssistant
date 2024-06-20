@@ -1,8 +1,6 @@
-import { UUID } from "crypto";
-
 export interface Device {
     name: string;
-    device_id: UUID;
+    device_id: string;
     power_status: boolean;
     time_start: Date;
     position: {

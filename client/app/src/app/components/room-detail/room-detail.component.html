@@ -1,0 +1,24 @@
+
+<div class="controls">
+@if(editMode === false) {
+  <button (click)="toggle()">Go to Edit Mode</button>
+}
+@else {
+  <button (click)="toggle()">Done Editting</button>
+}
+
+@if(editMode === true) {
+  <button (click)="selectElement('lamp')">Add Lamp</button>
+  <button (click)="selectElement('tv')">Add TV</button>
+  <button (click)="selectElement('curtains')">Add Curtains</button>
+  <button (click)="selectElement('airconditioner')">Add Air Conditioner</button>
+  <button (click)="selectElement('dishWasher')">Add Dish Washer</button>
+  <button (click)="selectElement('coffeeMachine')">Add Coffee Machine</button>
+}
+</div>
+
+
+<div class="main">
+  <figure id="room"></figure>
+  
+</div>
