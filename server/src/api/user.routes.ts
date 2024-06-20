@@ -5,18 +5,64 @@ import { Family } from "../models/familty";
 
 const router = Router();
 
-// GET all users
 router.get("/", async (req, res) => {
   try {
-    const data = await User.find({});
-    res.status(200).json(data);
-  } catch (e) {
-    console.log("Error getting users: ", e);
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get("/family/:familyId", async (req, res) => {
+  const { familyId } = req.params;
+  try {
+    if (!familyId) {
+      return res.status(400).json({ error: "Family ID is required" });
+    }
+    const users = await User.find({ familyId });
+    if (!users) {
+      return res
+        .status(404)
+        .json({ error: "No users found for this family ID" });
+    }
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 
 // Login endpoint
-router.post("/", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -29,6 +75,10 @@ router.post("/", async (req, res) => {
     if (req.body.password !== userExist.password) {
       return res.status(400).send("Invalid Password");
     }
+    const familyExist = await Family.findOne({
+      uniqueCode: req.body.uniqueCode,
+    });
+    if (!familyExist) return res.status(400).send("Wrong family code!");
 
     await userExist.save();
     res.status(200).send(userExist);
@@ -52,10 +102,10 @@ router.post("/register", async (req, res) => {
       uniqueCode: req.body.uniqueCode,
     });
     if (!familyExist) return res.status(400).send("Family does not exist");
-    
+
     const userInFamily = await User.findOne({
       email: req.body.email,
-      family: familyExist._id, 
+      family: familyExist._id,
     });
 
     // If the user already exists in the family, return an error

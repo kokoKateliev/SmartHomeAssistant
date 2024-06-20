@@ -1,43 +1,15 @@
-import { Schema, model, Document } from "mongoose";
-const ObjectId = Schema.ObjectId;
+import mongoose, { Schema, Document } from 'mongoose';
 
-const mongoose = require("mongoose");
+interface IFamily extends Document {
+  name: string;
+  members: Schema.Types.ObjectId[];
+}
 
-export const FamilySchema = new mongoose.Schema({
-  familyId: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  familyName: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    require: true,
-  },
-  users: [
-    {
-      type: ObjectId,
-      ref: "User",
-    },
-  ],
-  rooms: [
-    {
-      type: ObjectId,
-      ref: "Room",
-    },
-  ],
-  uniqueCode:{
-    type: String,
-    require: true,
-  }
+const FamilySchema: Schema = new Schema({
+  name: { type: String, required: true },
+  members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
-const Family = mongoose.model("Family", FamilySchema);
+const Family = mongoose.model<IFamily>('Family', FamilySchema);
 
 export { Family };

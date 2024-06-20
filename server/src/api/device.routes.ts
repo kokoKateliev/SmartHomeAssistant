@@ -1,48 +1,92 @@
-import { Router } from "express";
-import { Device, IDevice } from "../models/device";
+import { Router } from 'express';
+import {Device} from '../models/device';
 
 const router = Router();
 
-// POST API endpoint to save a device
-router.post("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { name, room } = req.body;
-    const device = new Device({ name, room });
-    const savedDevice = await device.save();
-    res.status(201).json(savedDevice);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    const devices = await Device.find();
+    res.json(devices);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// GET API endpoint to retrieve a device by its ID
-router.get("/:deviceId", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const deviceId = req.params.deviceId;
-    const device = await Device.findById(deviceId);
+    const device = new Device(req.body);
+    await device.save();
+    res.json(device);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const device = await Device.findById(req.params.id);
     if (!device) {
-      return res.status(404).json({ message: "Device not found" });
+      return res.status(404).json({ error: 'Device not found' });
     }
-    res.status(200).json(device);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    res.json(device);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// PUT API endpoint to update a device by its ID
-router.put("/:deviceId", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const deviceId = req.params.deviceId;
-    const updates: Partial<IDevice> = req.body; // Partial type for partial updates
-    const updatedDevice = await Device.findByIdAndUpdate(deviceId, updates, {
-      new: true,
-    });
-    if (!updatedDevice) {
-      return res.status(404).json({ message: "Device not found" });
+    const device = await Device.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!device) {
+      return res.status(404).json({ error: 'Device not found' });
     }
-    res.status(200).json(updatedDevice);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    res.json(device);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const device = await Device.findByIdAndDelete(req.params.id);
+    if (!device) {
+      return res.status(404).json({ error: 'Device not found' });
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/room/:roomId', async (req, res) => {
+  const { roomId } = req.params;
+  try {
+    if (!roomId) {
+      return res.status(400).json({ error: 'Room ID is required' });
+    }
+    const devices = await Device.find({ roomId });
+    if (devices.length === 0) {
+      return res.status(404).json({ error: 'No devices found for this room ID' });
+    }
+    res.json(devices);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/status/:status', async (req, res) => {
+  const { status } = req.params;
+  try {
+    if (!status) {
+      return res.status(400).json({ error: 'Status is required' });
+    }
+    const devices = await Device.find({ status });
+    if (devices.length === 0) {
+      return res.status(404).json({ error: 'No devices found with this status' });
+    }
+    res.json(devices);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
   }
 });
 

@@ -6,9 +6,9 @@ import deviceRouter from "./device.routes";
 
 const router = Router();
 
-router.use('/user', userRouter);
-router.use('/family', familyRouter);
-router.use('/room', roomRouter);
-router.use('/device', deviceRouter);
+router.use('/users', userRouter);
+router.use('/families', familyRouter);
+router.use('/rooms', roomRouter);
+router.use('/devices', deviceRouter);
 
 export default router;

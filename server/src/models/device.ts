@@ -1,26 +1,19 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IDevice extends Document {
-    name: string;
-    room: mongoose.Types.ObjectId;
-    mode: boolean;
+  name: string;
+  type: string;
+  status: string;
+  roomId: Schema.Types.ObjectId;
 }
 
-const deviceSchema = new Schema<IDevice>({
-  name: {
-    type: String,
-    required: true,
-  },
-  room: {
-    type: Schema.Types.ObjectId,
-    ref: "Room",
-  },
-  mode: {
-    type: Boolean,
-    default: false,
-  },
+const DeviceSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  type: { type: String, required: true },
+  status: { type: String, required: true },
+  roomId: { type: Schema.Types.ObjectId, ref: "Room", required: true },
 });
 
-const Device: Model<IDevice> = mongoose.model<IDevice>('Device', deviceSchema);
+const Device = mongoose.model<IDevice>("Device", DeviceSchema);
 
 export { Device, IDevice };

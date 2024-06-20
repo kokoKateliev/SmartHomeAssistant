@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { Family } from "../models/familty";
 const router = Router();
-import { v4 as uuidv4 } from 'uuid';
 
 // Register a new family
 router.post("/register", async (req, res) => {
@@ -17,14 +16,12 @@ router.post("/register", async (req, res) => {
     if (existingFamilyName) {
       return res.status(400).json({ message: "Family name already exists" });
     }
-    const uniqueCode = uuidv4();
 
     const newFamily = new Family({
       email,
       familyName,
-      password,
-      uniqueCode
-    });
+      password
+        });
 
     await newFamily.save();
 
@@ -52,6 +49,56 @@ router.get("/:id", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal server error", error: error });
+  }
+})
+
+router.get('/', async (req, res) => {
+  try {
+    const families = await Family.find();
+    res.json(families);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+router.put('/:id', async (req, res) => {
+  try {
+    const family = await Family.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!family) {
+      return res.status(404).json({ error: 'Family not found' });
+    }
+    res.json(family);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const family = await Family.findByIdAndDelete(req.params.id);
+    if (!family) {
+      return res.status(404).json({ error: 'Family not found' });
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/family/:familyId', async (req, res) => {
+  const { familyId } = req.params;
+  try {
+    if (!familyId) {
+      return res.status(400).json({ error: 'Family ID is required' });
+    }
+    const families = await Family.find({ familyId });
+    if (families.length === 0) {
+      return res.status(404).json({ error: 'No families found for this family ID' });
+    }
+    res.json(families);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
