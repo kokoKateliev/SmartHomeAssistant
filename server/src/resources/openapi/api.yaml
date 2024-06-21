@@ -1,0 +1,570 @@
+openapi: 3.0.0
+info:
+  title: Smart Home API
+  description: API documentation for the Smart Home Assistant application
+  version: 1.0.0
+
+paths:
+  /devices:
+    get:
+      summary: Get all devices
+      responses:
+        '200':
+          description: A list of devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '500':
+          description: Server error
+    post:
+      summary: Create a new device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '200':
+          description: Device created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '500':
+          description: Server error
+
+  /devices/{id}:
+    get:
+      summary: Get device by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the device
+      responses:
+        '200':
+          description: A device
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+    put:
+      summary: Update device by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '200':
+          description: Device updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete device by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the device
+      responses:
+        '204':
+          description: Device deleted
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+
+  /devices/room/{roomId}:
+    get:
+      summary: Get devices by room ID
+      parameters:
+        - in: path
+          name: roomId
+          schema:
+            type: string
+          required: true
+          description: The ID of the room
+      responses:
+        '200':
+          description: A list of devices in the room
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '400':
+          description: Room ID is required
+        '404':
+          description: No devices found for this room ID
+        '500':
+          description: Server error
+
+  /devices/status/{status}:
+    get:
+      summary: Get devices by status
+      parameters:
+        - in: path
+          name: status
+          schema:
+            type: string
+          required: true
+          description: The status of the devices
+      responses:
+        '200':
+          description: A list of devices with the specified status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '400':
+          description: Status is required
+        '404':
+          description: No devices found with this status
+        '500':
+          description: Server error
+
+  /families:
+    get:
+      summary: Get all families
+      responses:
+        '200':
+          description: A list of families
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Family'
+        '500':
+          description: Server error
+    post:
+      summary: Create a new family
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Family'
+      responses:
+        '200':
+          description: Family created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+        '500':
+          description: Server error
+
+  /families/{id}:
+    get:
+      summary: Get family by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the family
+      responses:
+        '200':
+          description: A family
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+        '404':
+          description: Family not found
+        '500':
+          description: Server error
+    put:
+      summary: Update family by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the family
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Family'
+      responses:
+        '200':
+          description: Family updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+        '404':
+          description: Family not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete family by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the family
+      responses:
+        '204':
+          description: Family deleted
+        '404':
+          description: Family not found
+        '500':
+          description: Server error
+
+  /families/family/{familyId}:
+    get:
+      summary: Get families by family ID
+      parameters:
+        - in: path
+          name: familyId
+          schema:
+            type: string
+          required: true
+          description: The ID of the family
+      responses:
+        '200':
+          description: A list of families with the specified ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Family'
+        '400':
+          description: Family ID is required
+        '404':
+          description: No families found for this family ID
+        '500':
+          description: Server error
+
+  /rooms:
+    get:
+      summary: Get all rooms
+      responses:
+        '200':
+          description: A list of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        '500':
+          description: Server error
+    post:
+      summary: Create a new room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          description: Room created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '500':
+          description: Server error
+
+  /rooms/{id}:
+    get:
+      summary: Get room by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the room
+      responses:
+        '200':
+          description: A room
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '404':
+          description: Room not found
+        '500':
+          description: Server error
+    put:
+      summary: Update room by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          description: Room updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '404':
+          description: Room not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete room by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the room
+      responses:
+        '204':
+          description: Room deleted
+        '404':
+          description: Room not found
+        '500':
+          description: Server error
+
+  /rooms/family/{familyId}:
+    get:
+      summary: Get rooms by family ID
+      parameters:
+        - in: path
+          name: familyId
+          schema:
+            type: string
+          required: true
+          description: The ID of the family
+      responses:
+        '200':
+          description: A list of rooms for the specified family ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        '400':
+          description: Family ID is required
+        '404':
+          description: No rooms found for this family ID
+        '500':
+          description: Server error
+
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Server error
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Server error
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+      responses:
+        '200':
+          description: A user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+    put:
+      summary: Update user by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete user by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+      responses:
+        '204':
+          description: User deleted
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+
+  /users/family/{familyId}:
+    get:
+      summary: Get users by family ID
+      parameters:
+        - in: path
+          name: familyId
+          schema:
+            type: string
+          required: true
+          description: The ID of the family
+      responses:
+        '200':
+          description: A list of users for the specified family ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Family ID is required
+        '404':
+          description: No users found for this family ID
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    Device:
+      type: object
+      properties:
+        name:
+          type: string
+        power_status:
+          type: bool
+        time_start:
+          type: string
+        position:
+          - x : int
+          - y : int
+          type: object
+        settings:
+          - color : string
+          - temperature : int
+          - temperature : int
+          mode: string
+    Family:
+      type: object
+      properties:
+        name:
+          type: string
+        users:
+          type: array
+    Room:
+      type: object
+      properties:
+        name:
+          type: string
+        devices:
+          type: array
+          items:
+            type: string
+        familyId:
+          type: string
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        password:
+          type: string
+        familyId:
+          type: string
