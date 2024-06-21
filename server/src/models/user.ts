@@ -1,15 +1,15 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface IUser extends Document {
-  name: string;
-  email: string;
+  firstName: string;
+  lastName: string;
   password: string;
   familyId: Schema.Types.ObjectId;
 }
 
 const UserSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   password: { type: String, required: true },
   familyId: { type: Schema.Types.ObjectId, ref: 'Family' },
 });

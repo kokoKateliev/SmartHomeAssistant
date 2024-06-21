@@ -86,20 +86,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.get('/family/:familyId', async (req, res) => {
-  const { familyId } = req.params;
-  try {
-    if (!familyId) {
-      return res.status(400).json({ error: 'Family ID is required' });
-    }
-    const families = await Family.find({ familyId });
-    if (families.length === 0) {
-      return res.status(404).json({ error: 'No families found for this family ID' });
-    }
-    res.json(families);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
 export default router;
