@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     await device.save();
     res.json(device);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error' + error });
   }
 });
 
@@ -65,8 +65,12 @@ router.get('/room/:roomId', async (req, res) => {
       return res.status(400).json({ error: 'Room ID is required' });
     }
     const devices = await Device.find({ roomId });
+    if(!devices) {
+      return res.status(404).json({ error: 'Something went wrong when finding devices for this room ID' });
+    }
+
     if (devices.length === 0) {
-      return res.status(404).json({ error: 'No devices found for this room ID' });
+      return res.status(204).json({ message: 'No devices found for this room ID' });
     }
     res.json(devices);
   } catch (error) {

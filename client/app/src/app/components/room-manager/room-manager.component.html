@@ -1,6 +1,6 @@
 <div class="room-buttons-container">
     @for(room of rooms; track room) {
-        <button [routerLink]="['/room', room.room_id]">{{room.name}}</button>
+        <button [routerLink]="['/rooms', room._id]">{{room.name}}</button>
     }
 </div>
 

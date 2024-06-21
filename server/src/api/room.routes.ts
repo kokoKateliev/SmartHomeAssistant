@@ -10,9 +10,9 @@ router.get('/', async (req, res) => {
   try{
   const rooms = await Room.find();
   if(rooms){
-    res.status(200).json(rooms);
+    return res.status(200).json(rooms);
   }
-  res.status(500).json("Error getting rooms");
+  res.status(404).json("No rooms found");
 }
 catch(err){
   res.status(500).json({ error: 'Server error' });

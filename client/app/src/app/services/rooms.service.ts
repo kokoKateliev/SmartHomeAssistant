@@ -9,21 +9,23 @@ import { Room } from '../types/IRoom';
 export class RoomsService {
   http = inject(HttpClient);
 
-  private roomsSubject = new BehaviorSubject<Room[]>([]);
-  rooms$ = this.roomsSubject.asObservable();
+  roomsBSubject = new BehaviorSubject<Room[]>([]);
 
   loadRooms(): void {
-      this.http.get<Room[]>('/api/rooms').subscribe((rooms: Room[]) => {
-        this.roomsSubject.next(rooms);
+      this.http.get<Room[]>('http://localhost:8080/rooms/').subscribe((rooms: Room[]) => {
+        this.roomsBSubject.next(rooms);
       });
   }
 
   getCurrentRooms(): Room[] {
-    return this.roomsSubject.value;
+    return this.roomsBSubject.value;
   }
 
   getRoomDetail(roomId: string): Room | undefined {
-    return this.roomsSubject.value.find(room => room.room_id === roomId);
+    if(!this.roomsBSubject.value.length){
+      this.loadRooms();
+    }
+    return this.roomsBSubject.value.find(room => room._id === roomId);
   }
 
   // addRoom(room: Room): void {

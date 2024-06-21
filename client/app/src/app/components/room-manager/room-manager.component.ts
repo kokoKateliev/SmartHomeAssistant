@@ -22,7 +22,7 @@ export class RoomManagerComponent {
 
   rooms : Room[] = [
     {
-      room_id: v4(),
+      _id: v4(),
       name: "Kitchen",
       temperature: 35.8,
       devices: [
@@ -54,7 +54,7 @@ export class RoomManagerComponent {
       ]
     },
     {
-      room_id: v4(),
+      _id: v4(),
       name: "Living Room",
       temperature: 35.8,
       devices: [
@@ -88,10 +88,10 @@ export class RoomManagerComponent {
   ];
   
   ngOnInit(): void {
-    this.subscription = this.roomsService.rooms$.subscribe(rooms => {
+    this.roomsService.loadRooms();
+    this.subscription = this.roomsService.roomsBSubject.subscribe(rooms => {
       this.rooms = rooms;
     });
-    this.roomsService.loadRooms();
   }
 
   ngOnDestroy(): void {

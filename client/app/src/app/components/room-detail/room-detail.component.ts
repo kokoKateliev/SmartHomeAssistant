@@ -28,30 +28,33 @@ export class RoomDetailComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.roomId = params.get('id');
+      this.roomId = params.get('_id');
       if (this.roomId) {
-        this.room = this.roomsService.getRoomDetail(this.roomId);
-        this.loadRoomDevices();
-        this.initializeRoom();
+        this.roomsService.roomsBSubject.subscribe(data => {
+          this.room = data.find(room => room._id === this.roomId);
+          this.initializeRoom();
+        });
+        
+        this.devicesService.getDevicesFromRoom(this.roomId);
+        this.devicesService.devicesBSubject.subscribe(data => {
+          if(this.roomId){
+            this.devices = data;
+            this.loadDevicesOnSvg();
+          }
+        });
       }
     });
 
-    this.devicesService.devices$.subscribe(devices => {
-      this.devices = devices;
-      this.loadDevicesOnSvg();
-    });
-  }
-
-  loadRoomDevices(): void {
-    if(this.roomId){
-      this.devicesService.getDevicesFromRoom(this.roomId);
-    }
+    // this.devicesService.devices$.subscribe(devices => {
+    // });
   }
 
   initializeRoom(): void {
-    // "url('../../assets/diningroom.png')"
-    const url = "url('../../assets/" + this.room?.name + ".png')";
-    this.createSvg(url);
+    // "url('../../assets/diningroom.png')" 
+    if(this.room){
+      const url = "url('../../assets/" + this.room.name.replace(/\s+/g, '').toLowerCase() + ".png')";
+      this.createSvg(url);
+    }
   }
 
   selectedDevice: Device | undefined = undefined;
@@ -100,55 +103,58 @@ export class RoomDetailComponent {
   private addElement(event: MouseEvent): void {
     if (!this.selectedElement) return;
 
-    const id = v4();
     const [x, y] = d3.pointer(event);
 
-    const group = this.svg.append('g')
-      .attr('transform', `translate(${x},${y})`)
-      .call(d3.drag()
-      .on('drag', (event: any) => {
-        d3.select(event.sourceEvent.target.parentNode)
-          .attr('transform', `translate(${event.x},${event.y})`);
-      })
-      .on('end', () => {
-        this.updateDevicePosition(id, event.x, event.y);
-      })
-    );
-
-    const circle = group.append('circle')
-      .attr('r', 25)
-      .attr('id', id)
-      .attr('element', this.selectElement)
-      .attr('fill', 'red')
-      .on('click', (event: MouseEvent) => {
-        event.stopPropagation();
-        this.switchDevice(event.target);
-      })
-      .on('dblclick', (event: MouseEvent) => {
-        event.stopPropagation();
-        this.switchOn(event.target);
-      });
-
-    const href = this.deviceImages[this.selectedElement];
-
-    group.append('image')
-      .attr('xlink:href', href)
-      .attr('width', 30)
-      .attr('height', 30)
-      .attr('x', -15)
-      .attr('y', -15);
-      
     const newDevice: Device = {
       settings: {},
       position: { x, y },
       name: this.selectedElement,
       power_status: false,
       time_start: new Date(),
-      device_id: id,
+      // device_id: id,
     };
 
-    this.devicesService.addDeviceToDevices(newDevice);
-    this.selectedElement = null;
+    this.devicesService.addNewDevice(newDevice);
+    this.devicesService.addedDeviceSubject.subscribe(device => {
+      if(device){      
+        const group = this.svg.append('g')
+        .attr('transform', `translate(${x},${y})`)
+        .call(d3.drag()
+        .on('drag', (event: any) => {
+          d3.select(event.sourceEvent.target.parentNode)
+            .attr('transform', `translate(${event.x},${event.y})`);
+        })
+        .on('end', () => {
+          this.updateDevicePosition(device.device_id!, event.x, event.y);
+        })
+      );
+
+      const circle = group.append('circle')
+        .attr('r', 25)
+        .attr('id', device.device_id!)
+        .attr('element', this.selectElement)
+        .attr('fill', 'red')
+        .on('click', (event: MouseEvent) => {
+          event.stopPropagation();
+          this.switchDevice(event.target);
+        })
+        .on('dblclick', (event: MouseEvent) => {
+          event.stopPropagation();
+          this.switchOn(event.target);
+        });
+
+      const href = this.deviceImages[this.selectedElement!];
+
+      group.append('image')
+        .attr('xlink:href', href)
+        .attr('width', 30)
+        .attr('height', 30)
+        .attr('x', -15)
+        .attr('y', -15);
+      
+      this.selectedElement = null;
+      }
+    });
   }
 
   switchDevice(element: any): void {
@@ -192,6 +198,10 @@ export class RoomDetailComponent {
     }
   }
 
+  updateDevice(device: Device): void {
+    this.devicesService.updateDevice(device);
+  }
+
   private loadDevicesOnSvg(): void {
     if (this.devices.length) {
       this.clearSvg();
@@ -206,7 +216,7 @@ export class RoomDetailComponent {
               data.position.y = event.y;
             })
             .on('end', () => {
-              this.updateDevicePosition(data.device_id, data.position.x!, data.position.y!);
+              this.updateDevicePosition(data.device_id!, data.position.x!, data.position.y!);
             })
           );
 

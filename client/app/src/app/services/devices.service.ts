@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Device } from '../types/IDevice';
 import { HttpClient } from '@angular/common/http';
 
@@ -9,45 +9,48 @@ import { HttpClient } from '@angular/common/http';
 export class DevicesService {
   http = inject(HttpClient);
 
-  private devicesSubject = new BehaviorSubject<Device[]>([]);
-  devices$ = this.devicesSubject.asObservable();
+  devicesBSubject = new BehaviorSubject<Device[]>([]);
 
-  private selectedDeviceSubject = new Subject<Device | null>();
-  selectedDevice$ = this.selectedDeviceSubject.asObservable();
+  addedDeviceSubject = new Subject<Device | null>();
+
+  selectedDeviceSubject = new Subject<Device | null>();
 
   getDevicesFromRoom(roomId: string): void {
     if(roomId){
-      this.http.get<Device[]>(`/api/room/${roomId}/devices`).subscribe((devices: Device[]) => {
-        this.devicesSubject.next(devices);
+      this.http.get<Device[]>(`http://localhost:8080/devices/room/${roomId}`).subscribe((devices: Device[]) => {
+        if(devices && devices.length !== 0){
+          this.devicesBSubject.next(devices);
+        }
       });
     }
   }
 
   getDevices(): Device[] {
-    return this.devicesSubject.value;
+    return this.devicesBSubject.value;
   }
 
-  addDeviceToDevices(device: Device): void {
-    this.saveDeviceToDatabase(device).subscribe((savedDevice: Device) => {
-      const currentDevices = this.devicesSubject.value;
-      this.devicesSubject.next([...currentDevices, savedDevice]);
+  addNewDevice(device: Device) {
+    this.saveDeviceToDatabase(device, true).subscribe((savedDevice: Device) => {
+      const currentDevices = this.devicesBSubject.value;
+      this.devicesBSubject.next([...currentDevices, savedDevice]);
+      this.addedDeviceSubject.next(savedDevice);
     });
   }
 
   updateDevice(updatedDevice: Device): void {
     this.saveDeviceToDatabase(updatedDevice).subscribe((savedDevice: Device) => {
-      const currentDevices = this.devicesSubject.value.map(device =>
+      const currentDevices = this.devicesBSubject.value.map(device =>
         device.device_id === savedDevice.device_id ? savedDevice : device
       );
-      this.devicesSubject.next(currentDevices);
+      this.devicesBSubject.next(currentDevices);
     });
   }
 
-  private saveDeviceToDatabase(device: Device) {
-    if (device.device_id) {
-      return this.http.put<Device>(`/api/device/${device.device_id}`, device);
+  private saveDeviceToDatabase(device: Device, isNew: boolean = false): Observable<Device> {
+    if (isNew) {
+      return this.http.post<Device>('http://localhost:8080/devices', device);
     } else {
-      return this.http.post<Device>('/api/device', device);
+      return this.http.put<Device>(`http://localhost:8080/devices/${device.device_id}`, device);
     }
   }
 

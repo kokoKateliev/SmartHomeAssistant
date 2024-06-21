@@ -20,14 +20,14 @@ export const routes: Routes = [
     component: RoomManagerComponent,
     children: [
                 {
-                  path: ':id',
+                  path: ':_id',
                   component: RoomDetailComponent,
-                  // children: [
-                  //   {
-                  //     path: ':controller',
-                  //     component: DeviceControllerComponent
-                  //   }
-                  // ]
+                  children: [
+                    {
+                      path: ':controller',
+                      component: DeviceControllerComponent
+                    }
+                  ]
                 },
       ],
     },

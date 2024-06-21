@@ -1,32 +1,30 @@
 @if(device){
-    <div class="controlls">
-        <h3>{{device.name}}</h3>
-        <div>
-            @if(device.power_status){
-                <button (click)="SwitchPower()" >Switch Off</button>
-            } 
-            @else {
-                <button (click)="SwitchPower()" >Switch On</button>
-            }
-        </div>
-        <div>
-            @if(device.name === 'lamp' || device.settings.color) {
-                <input type="color">
-            }@else if(device.name === 'airconditioner' || device.settings.mode) {
-                <select>
-                    <option value="1">Mode 1</option>
-                    <option value="2">Mode 2</option>
-                </select>
-            }
-            @if(device.name === 'airconditioner' || device.settings.temperature) {
-                <p>Set temeprature:</p>
-                <input type="range" min="15" max="45" [value]='device.settings.temperature' class="slider" id="myRange">
-            }
-        </div>
-    </div>
-}
-@else { 
+<div class="controls">
+    <h3>{{ device.name }}</h3>
     <div>
-        <h3>Select a device to show controlls.</h3>
+      <button (click)="switchPower()">
+        {{ device.power_status ? 'Switch Off' : 'Switch On' }}
+      </button>
+    </div>
+    <div [ngSwitch]="device.name">
+      <!-- <ng-container *ngSwitchCase="'lamp'"> -->
+        <!-- <input type="color" [(ngModel)]="device.settings.color" (change)="updateDeviceSetting('color', $event.target.value)"> -->
+      <!-- </ng-container> -->
+      <!-- <ng-container *ngSwitchCase="'airconditioner'"> -->
+        <!-- <select [(ngModel)]="device.settings.mode" (change)="updateDeviceSetting('mode', $event.target.value)"> -->
+          <!-- <option value="hot">Hot</option>
+          <option value="cold">Cold</option>
+        </select> -->
+        <p>Set temperature:</p>
+        <!-- <input type="range" min="15" max="45" [(ngModel)]="device.settings.temperature" (input)="updateDeviceSetting('temperature', $event.target.value)"> -->
+      <!-- </ng-container> -->
+    </div>
+  </div>
+}
+@else {
+    <div>
+        <h3>Select a device to show controls.</h3>
     </div>
 }
+  
+  

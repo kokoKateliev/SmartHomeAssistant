@@ -1,39 +1,36 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Device } from '../../types/IDevice';
 import { DevicesService } from '../../services/devices.service';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { NgSwitch } from '@angular/common';
 
 @Component({
   selector: 'app-device-controller',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, NgSwitch],
   templateUrl: './device-controller.component.html',
   styleUrl: './device-controller.component.css'
 })
 export class DeviceControllerComponent {
-  @Input() device!: Device | null;
+  @Input() device: Device | undefined;
 
-  deviceService = inject(DevicesService);
-  subscription!: Subscription;
-  // color!:string;
-  // temperature!: number;
-  // mode!: string;
+  constructor(private devicesService: DevicesService) {}
 
-  ngOnInit() {
-    this.subscription = this.deviceService.selectedDevice$.subscribe(device => {
-      this.device = device;
-    });
-  }
-
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.subscription.unsubscribe();
-  }
-
-  SwitchPower(): void {
-    if(this.device){
+  switchPower(): void {
+    if (this.device) {
       this.device.power_status = !this.device.power_status;
+      this.devicesService.updateDevice(this.device);
+    }
+  }
+
+  updateDeviceSetting(settingName: string, value: any): void {
+    if (this.device) {
+      if (!this.device.settings) {
+        this.device.settings = {};
+      }
+      // this.device.settings[settingName] = value;
+      this.devicesService.updateDevice(this.device);
     }
   }
 }
