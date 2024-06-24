@@ -14,6 +14,8 @@ export class DevicesService {
   addedDeviceSubject = new Subject<Device | null>();
 
   selectedDeviceSubject = new Subject<Device | null>();
+  
+  changesDeviceSubject = new Subject<Device | null>();
 
   getDevicesFromRoom(roomId: string): void {
     if(roomId){
@@ -40,7 +42,7 @@ export class DevicesService {
   updateDevice(updatedDevice: Device): void {
     this.saveDeviceToDatabase(updatedDevice).subscribe((savedDevice: Device) => {
       const currentDevices = this.devicesBSubject.value.map(device =>
-        device.device_id === savedDevice.device_id ? savedDevice : device
+        device._id === savedDevice._id ? savedDevice : device
       );
       this.devicesBSubject.next(currentDevices);
     });
@@ -50,7 +52,7 @@ export class DevicesService {
     if (isNew) {
       return this.http.post<Device>('http://localhost:8080/devices', device);
     } else {
-      return this.http.put<Device>(`http://localhost:8080/devices/${device.device_id}`, device);
+      return this.http.put<Device>(`http://localhost:8080/devices/${device._id}`, device);
     }
   }
 

@@ -11,9 +11,70 @@
     opacity: 1;
 }
 
-.controlls {
+.controls {
     display: flex;
     align-items: center;
     flex-direction: column;
     width: 100%;
+}
+
+form {
+    height: 70%;
+    width: 60%;
+    display: flex;
+    /* justify-content: space-evenly; */
+    flex-direction: column;
+    align-items: center;
+
+    background-color: #222222;
+    border-radius: 15px;
+}
+
+.form-group {
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.inner-group {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-bottom: 8%;
+    align-items: center;
+}
+
+.controls button {
+    background-color: #414141;
+    color: #E4E6EB;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    padding: 4% 5%;
+    border-radius: 40px;
+    transition: 0.5s ease;
+    margin-right: 1%;
+    margin-bottom: 10%;
+
+}
+
+
+.controls button:hover {
+    background-color: #636363;
+    transform: scale(1.1);
+}
+
+select {
+    width: 60%;
+    border: none;
+    outline: none;
+    background-color: DodgerBlue;
+    color: white;
+    border-radius: 5px;
+    padding: 3%;
+}
+
+option {
+    padding: 3%;
 }
