@@ -9,10 +9,13 @@ import {
   HttpClientModule,
   provideHttpClient,
   withFetch,
+  withInterceptors,
 } from '@angular/common/http';
-import { AuthService } from './auth/auth.service';
-import { TokenInterceptor } from './auth/token.interceptor';
-import { AuthGuard } from './auth/auth.guard';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { TokenInterceptor } from './components/auth/token.interceptor';
+import { AuthService } from './components/auth/auth.service';
+import { AuthGuard } from './components/auth/auth.guard';
+
 
 const localProviders = [
   // TodoService
@@ -23,11 +26,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(CommonModule),
-    importProvidersFrom(HttpClient),
-    provideHttpClient(withFetch()),
+    // importProvidersFrom(HttpClient),
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     AuthService,
     AuthGuard,
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
+   
   ]
 };

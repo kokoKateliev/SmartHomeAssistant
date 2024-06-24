@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from 'express';
-import { matchingFieldValue } from '../../validators/fns/matching-field-value';
+import { matchingFieldValue } from '../../../validators/fns/matching-field-value';
 import { AuthGuard } from '../auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 

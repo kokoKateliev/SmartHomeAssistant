@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {environment} from "../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {User} from "../types/IUser";
@@ -10,8 +10,7 @@ import {Observable} from "rxjs";
 export class UserService {
   private apiServerUrl = environment.apiUsersUrl;
 
-  constructor(private http: HttpClient) {
-  }
+  http =inject(HttpClient)
 
   public getUsers() {
     console.log(this.apiServerUrl);
