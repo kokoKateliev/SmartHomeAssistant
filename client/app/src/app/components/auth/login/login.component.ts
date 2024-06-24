@@ -1,16 +1,8 @@
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormsModule,
-  FormControl,
-  Validators,
-} from '@angular/forms';
-import { CommonModule, NgIf } from '@angular/common';
-import { Router } from 'express';
-import { AuthGuard } from '../auth.guard';
-import { HttpClientModule } from '@angular/common/http';
 
 type LoginFormData = {
   email: string;
@@ -19,41 +11,32 @@ type LoginFormData = {
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
   standalone: true,
-  imports: [FormsModule, CommonModule, NgIf,ReactiveFormsModule],
-  providers: [AuthService,HttpClientModule],
+  imports: [FormsModule, CommonModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  authService = inject(AuthService);
+  @ViewChild('loginForm') loginForm!: NgForm;
   router = inject(Router);
-
-  loginForm = new FormGroup({
-    email: new FormControl<string>('', [Validators.required, Validators.email]),
-    password: new FormControl<string>('', [Validators.required]),
-  });
+  authService = inject(AuthService);
 
   wrongEmailOrPassword = false;
   isLoading = false;
 
-  onSubmit() {
+  formSubmitHandler(): void {
     if (this.loginForm.invalid) return;
     const { email, password } = this.loginForm.value as LoginFormData;
     this.isLoading = true;
-    // if (this.loginForm.valid) {
-    //   const { email, password } = this.loginForm.value as LoginFormData;
-    //   this.authService.login(email, password).subscribe(
-    //     (response: any) => {
-    //       console.log('Login successful', response);
-    //       this.isLoading = false;
-    //     },
-    //     (error: any) => {
-    //       console.error('Login failed', error);
-    //       this.isLoading = false;
-    //       this.wrongEmailOrPassword = true;
-    //     }
-    //   );
-    // }
+    this.authService.login(email, password);
+    this.authService.isLoggedIn.subscribe(isLogged => {
+      if (isLogged) {
+        this.isLoading = false;
+        this.router.navigate(['/rooms']);
+      } else {
+        this.isLoading = false;
+        this.wrongEmailOrPassword = true;
+      }
+    });
   }
 }

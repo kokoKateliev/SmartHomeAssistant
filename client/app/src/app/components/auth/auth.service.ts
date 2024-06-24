@@ -1,77 +1,79 @@
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, OnDestroy, inject } from '@angular/core';
+import { BehaviorSubject, Subject, Subscription, map, of } from 'rxjs';
 import { User } from '../../types/IUser';
+
+interface IUser {
+  email: string;
+  password: string;
+}
+
+interface IRegister {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  uniqueCode?: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
-  // private apiUrl = 'http://localhost:8080';
-  // private tokenKey = 'authToken';
-  // private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+export class AuthService implements OnDestroy {
   http = inject(HttpClient);
 
-  authenticatedUser$$ = new BehaviorSubject<User | null | undefined>(undefined);
-  isLoggedIn$ = this.authenticatedUser$$.pipe(
-    map((user) => user !== null || user !== undefined)
-  );
-  isAuthenticating$ = this.authenticatedUser$$.pipe(
-    map((user) => user === undefined)
-  );
-  // isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  userBSubject = new BehaviorSubject<User | null>(null);
+  isLoggedIn = new Subject<boolean>();
 
-  // http = inject(HttpClient);
-  // router = inject(Router);
+  userSubscription: Subscription;
 
-  // private hasToken(): boolean {
-  //   return !!localStorage?.getItem(this.tokenKey);
-  // }
-
-  // login(email: string, password: string): Observable<any> {
-  //   return this.http
-  //     .post(`${this.apiUrl}/users/login`, { email, password })
-  //     .pipe(
-  //       tap((response: any) => {
-  //         localStorage?.setItem(this.tokenKey, response.token);
-  //         this.isLoggedInSubject.next(true);
-  //         this.router.navigate(['/rooms']);
-  //       })
-  //     );
-  // }
-
-  // register(name: string, email: string, password: string): Observable<any> {
-  //   return this.http
-  //     .post(`${this.apiUrl}/users/register`, { name, email, password })
-  //     .pipe(
-  //       tap((response: any) => {
-  //         this.router.navigate(['/login']);
-  //       })
-  //     );
-  // }
-
-  // logout() {
-  //   localStorage.removeItem(this.tokenKey);
-  //   this.isLoggedInSubject.next(false);
-  //   this.router.navigate(['/login']);
-  // }
-
-  authenticate() {
-    return this.http.get<User | null>('/users').pipe(
-      tap((user) => {
-        this.authenticatedUser$$.next(user);
-      }),
-      catchError(() => {
-        this.authenticatedUser$$.next(null);
-        return [];
-      })
-    );
+  constructor() {
+    this.userSubscription = this.userBSubject.subscribe(isUser => {
+      if(isUser){
+        this.isLoggedIn.next(true);
+      }
+      else{
+        this.isLoggedIn.next(false);
+      }
+    });
   }
 
-  // getToken(): string | null {
-  //     return localStorage?.getItem(this.tokenKey);
-  // }
+  ngOnDestroy() {
+    this.userSubscription?.unsubscribe();
+  }
+
+  login(email: string, password: string) {
+    const user: IUser = {
+      email: email,
+      password: password,
+    };
+    this.http.post<User>('http://localhost:8080/login', user).subscribe( user => {
+      if(user){
+        this.userBSubject.next(user);
+      }
+    });
+  }
+
+  register(email: string, password: string, firstName: string, lastName: string, uniqueCode?: string) {
+    const user: IRegister = {
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      uniqueCode: uniqueCode,
+    };
+    this.http.post<User>('http://localhost:8080/register', user).subscribe( user => {
+      if(user){
+        this.userBSubject.next(user);
+      }
+    });
+  }
+
+  logout() {
+    // return new Promise((resolve) => {
+    //   this.user$$.next(null);
+    //   resolve(null);
+    // });
+  }
 }

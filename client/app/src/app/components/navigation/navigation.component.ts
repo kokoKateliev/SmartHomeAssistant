@@ -1,42 +1,25 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
-import { Auth } from '@angular/fire/auth';
-import { AuthService } from '../auth/auth.service';
-import { LoginComponent } from '../auth/login/login.component';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [RouterLink, AsyncPipe, LoginComponent],
+  imports: [RouterLink],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.css',
+  styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
   isDay!: boolean;
 
-  // authService = inject(AuthService);
-  // router = inject(Router);
-
-  // isLogged$ = this.authService.isLoggedIn$;
-
-
   ngOnInit(): void {
+
     //can be changed to detect async the time
     const time = new Date().getHours();
-    if (time >= 7 && time <= 19) {
+    if(time >= 7 && time <= 19){
       this.isDay = true;
-    } else {
+    }
+    else{
       this.isDay = false;
     }
-  }
-
-  authService = inject(AuthService);
-  router = inject(Router);
-
-  isLoading = false;
-
-  logoutHandler() {
-    this.isLoading = true;
   }
 }
