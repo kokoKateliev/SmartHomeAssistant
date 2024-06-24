@@ -1,24 +1,38 @@
 @if(device){
-<div class="controls">
-    <h3>{{ device.name }}</h3>
-    <div>
-      <button (click)="switchPower()">
-        {{ device.power_status ? 'Switch Off' : 'Switch On' }}
-      </button>
-    </div>
-    <div [ngSwitch]="device.name">
-      <!-- <ng-container *ngSwitchCase="'lamp'"> -->
-        <!-- <input type="color" [(ngModel)]="device.settings.color" (change)="updateDeviceSetting('color', $event.target.value)"> -->
-      <!-- </ng-container> -->
-      <!-- <ng-container *ngSwitchCase="'airconditioner'"> -->
-        <!-- <select [(ngModel)]="device.settings.mode" (change)="updateDeviceSetting('mode', $event.target.value)"> -->
-          <!-- <option value="hot">Hot</option>
-          <option value="cold">Cold</option>
-        </select> -->
-        <p>Set temperature:</p>
-        <!-- <input type="range" min="15" max="45" [(ngModel)]="device.settings.temperature" (input)="updateDeviceSetting('temperature', $event.target.value)"> -->
-      <!-- </ng-container> -->
-    </div>
+    <div class="controls">
+        <form [formGroup]="controllerForm" class="form">
+            <h3>{{ device.name | deviceNames }}</h3>
+            <button (click)="switchPower()">
+                {{ device.power_status ? 'Switch Off' : 'Switch On' }}
+            </button>
+        
+            <ng-container [ngSwitch]="device.name">
+                <div class="form-group" *ngSwitchCase="'lamp'">
+                    <div class="inner-group">
+                        <label for="color">Change Color:</label>
+                        <input type="color" class="form-control" id="color" name="color" formControlName="color">
+                        <!-- <div *ngIf="userForm.controls.name?.touched && userForm.controls.name?.invalid" class="text-danger">
+                            Name is required.
+                        </div> -->
+                    </div>
+                </div>
+                
+                <div class="form-group" *ngSwitchCase="'airconditioner'">
+                    <div class="inner-group">
+                    <label for="mode">Mode:</label>
+                    <select name="mode" id="mode" formControlName="mode">
+                        <option value="hot">Hot</option>
+                        <option value="cold">Cold</option>
+                        <option value="dry">Dry</option>
+                        <option value="fan">Fan</option>
+                    </select>
+                    </div>  
+                    <label for="temperature">Current Temperature: {{ controllerForm.get('temperature')?.value }}</label>
+                    <input type="range" min="15" max="45" class="slider" id="temperature" formControlName="temperature">
+                </div>
+            </ng-container>
+        </form>
+
   </div>
 }
 @else {

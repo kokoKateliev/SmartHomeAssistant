@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, SimpleChanges, inject } from '@angular/core';
 import { Room } from '../../types/IRoom';
 import * as d3 from 'd3';
 import { Device } from '../../types/IDevice';
@@ -17,10 +17,12 @@ import { RoomsService } from '../../services/rooms.service';
   styleUrl: './room-detail.component.css'
 })
 export class RoomDetailComponent {
-  // @Input() room!: Room | null;
   roomId!: string | null;
   room: Room | undefined;
   devices: Device[] = [];
+
+  areLoadedDevices: boolean = false;
+  areShownDevices: boolean = false;
 
   route = inject(ActivatedRoute);
   roomsService = inject(RoomsService);
@@ -37,23 +39,42 @@ export class RoomDetailComponent {
         
         this.devicesService.getDevicesFromRoom(this.roomId);
         this.devicesService.devicesBSubject.subscribe(data => {
-          if(this.roomId){
+          if(this.roomId && data.length){
             this.devices = data;
-            this.loadDevicesOnSvg();
+            if(!this.areShownDevices){
+              this.loadDevicesOnSvg();
+            }
           }
         });
+        
+        this.devicesService.changesDeviceSubject.subscribe(data => {
+          if(data) {
+            this.updateSelectedDevice(data);
+          }
+        })
       }
     });
+  }
 
-    // this.devicesService.devices$.subscribe(devices => {
-    // });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['devices']) {
+      // this.updateSelectedDevice();
+    }
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    
   }
 
   initializeRoom(): void {
     // "url('../../assets/diningroom.png')" 
     if(this.room){
       const url = "url('../../assets/" + this.room.name.replace(/\s+/g, '').toLowerCase() + ".png')";
-      this.createSvg(url);
+      if (typeof document !== 'undefined') {
+        this.createSvg(url);
+      }
     }
   }
 
@@ -66,10 +87,9 @@ export class RoomDetailComponent {
   }
 
   private svg: any;
-  private roomWidth = 700;
-  private roomHeight = 600;
+  private roomWidth = '100%';
+  private roomHeight = '100%';
   private selectedElement: string | null = null;
-  private elementsData: Device[] = [];
 
   deviceImages: { [key: string]: string } = {
     lamp : 'assets/lamp.png',
@@ -77,23 +97,28 @@ export class RoomDetailComponent {
     curtains : 'assets/curtains.png',
     airconditioner : 'assets/airconditioner.png',
     dishWasher : 'assets/dishwasher.png',
-    CoffeeMachine : 'assets/coffeemachine.png'
+    coffeeMachine : 'assets/coffeemachine.png'
   }
 
   private createSvg(url: string): void {
-    this.svg = d3.select("figure#room")
-      .append("svg")
-      .attr("width", this.roomWidth)
-      .attr("height", this.roomHeight)
-      .style("background-image", url)
-      .style("background-repeat", "no-repeat")
-      .style("backgroind-position", "center")
-      .style("background-size", "100% 100%")
-      // background-position: center;
-
-      .style("border-radius", "15px");
-
-    this.svg.on('click', (event: MouseEvent) => this.addElement(event));
+    if(this.room){
+      this.svg = d3.select("figure#room")
+        .append("svg")
+        .attr("width", this.roomWidth)
+        .attr("height", this.roomHeight)
+        .attr("_id", this.room._id)
+        .style("background-image", url)
+        .style("background-repeat", "no-repeat")
+        .style("backgroind-position", "center")
+        .style("background-size", "100% 100%")
+  
+        .style("border-radius", "15px");
+  
+      this.svg.on('click', (event: MouseEvent) => this.addElement(event));
+    }
+    if(this.areLoadedDevices) {
+      this.loadDevicesOnSvg();
+    }
   }
 
   selectElement(element: string): void {
@@ -106,12 +131,12 @@ export class RoomDetailComponent {
     const [x, y] = d3.pointer(event);
 
     const newDevice: Device = {
+      roomId: this.room!._id,
       settings: {},
       position: { x, y },
       name: this.selectedElement,
       power_status: false,
       time_start: new Date(),
-      // device_id: id,
     };
 
     this.devicesService.addNewDevice(newDevice);
@@ -124,16 +149,16 @@ export class RoomDetailComponent {
           d3.select(event.sourceEvent.target.parentNode)
             .attr('transform', `translate(${event.x},${event.y})`);
         })
-        .on('end', () => {
-          this.updateDevicePosition(device.device_id!, event.x, event.y);
+        .on('end', (event: any) => {
+          this.updateDevicePosition(device._id!, event.x, event.y);
         })
       );
 
       const circle = group.append('circle')
         .attr('r', 25)
-        .attr('id', device.device_id!)
+        .attr('id', device._id)
         .attr('element', this.selectElement)
-        .attr('fill', 'red')
+        .attr('fill', '#4a4a4a')
         .on('click', (event: MouseEvent) => {
           event.stopPropagation();
           this.switchDevice(event.target);
@@ -160,7 +185,7 @@ export class RoomDetailComponent {
   switchDevice(element: any): void {
     const circle = d3.select(element);
     const id = circle.attr('id');
-    this.selectedDevice = this.devices.find(el => el.device_id === id);
+    this.selectedDevice = this.devices.find(el => el._id === id);
     if (this.selectedDevice) {
       this.devicesService.selectDevice(this.selectedDevice);
     }
@@ -169,20 +194,27 @@ export class RoomDetailComponent {
   private switchOn(element: any): void {
     const circle = d3.select(element);
     const id = circle.attr('id');
+    const device = this.devices.find(el => el._id === id);
+    if(!device)
+      return console.log("Not Found Device")
     const currentColor = circle.attr('fill');
-    const el = circle.attr('element');
+    const el = device.name;
     let activeColor = '#188c25';
     if(el === 'lamp') {
-      const device = this.devices.find(d => d.device_id === id);
+      const device = this.devices.find(d => d._id === id);
+      if(!device!.settings){
+        device!.settings = {
+          color: 'yellow'
+        };
+      }
       activeColor = device?.settings.color ? device.settings.color : '#188c25';
     }
     const newColor = currentColor === '#4a4a4a' ? activeColor : '#4a4a4a';
     circle.attr('fill', newColor);
 
-    // const parentTransform = d3.select(element.parentNode).attr('transform');
-    // const [x, y] = parentTransform.replace('translate(', '').replace(')', '').split(',').map(Number);
+    const parentTransform = d3.select(element.parentNode).attr('transform');
+    const [x, y] = parentTransform.replace('translate(', '').replace(')', '').split(',').map(Number);
 
-    const device = this.devices.find(el => el.device_id === id);
     if (device) {
       device.power_status = !device.power_status;
       this.devicesService.updateDevice(device);
@@ -190,7 +222,7 @@ export class RoomDetailComponent {
   }
 
   private updateDevicePosition(id: string, x: number, y: number): void {
-    const device = this.devices.find(el => el.device_id === id);
+    const device = this.devices.find(el => el._id === id);
     if (device) {
       device.position.x = x;
       device.position.y = y;
@@ -203,8 +235,16 @@ export class RoomDetailComponent {
   }
 
   private loadDevicesOnSvg(): void {
+    if(!this.svg) {
+      this.areLoadedDevices = true;
+      return;
+    }
+
+    
+    this.areShownDevices = true;
+
     if (this.devices.length) {
-      this.clearSvg();
+      // this.clearSvg();
       this.devices.forEach(data => {
         const group = this.svg.append('g')
           .attr('transform', `translate(${data.position.x},${data.position.y})`)
@@ -216,15 +256,15 @@ export class RoomDetailComponent {
               data.position.y = event.y;
             })
             .on('end', () => {
-              this.updateDevicePosition(data.device_id!, data.position.x!, data.position.y!);
+              this.updateDevicePosition(data._id!, data.position.x!, data.position.y!);
             })
           );
 
         const circle = group.append('circle')
           .attr('r', 25)
-          .attr('id', data.device_id)
+          .attr('id', data._id)
           .attr('element', this.selectElement)
-          .attr('fill', data.power_status ? data.settings.color ? data.settings.color : '#188c25' : '#4a4a4a')
+          .attr('fill', data.power_status ? data.settings?.color ? data.settings.color : '#188c25' : '#4a4a4a')
           .attr('element', this.selectElement)
           .on('click', (event: MouseEvent) => {
             event.stopPropagation();
@@ -246,7 +286,36 @@ export class RoomDetailComponent {
   }
   
   private clearSvg(): void {
-    this.svg.selectAll('g').remove();
+    if(this.svg.selectAll('g')){
+      this.svg.selectAll('g').remove();
+    }
+  }
+
+  private updateSelectedDevice(device: Device): void {
+    const circle = d3.select(`[id="${device._id}"]`);
+    const oldDevice = this.devices.find(el => el._id === device._id);
+    if(!circle || !oldDevice) {
+      return;
+    }
+    if(oldDevice.power_status !== device.power_status) {
+      const currentColor = circle.attr('fill');
+      if(currentColor !== device.settings.color || oldDevice.power_status !== device.power_status ){
+        let activeColor = '#188c25';
+        if(device.settings?.color){
+          activeColor = device.settings.color;
+        }
+        if(device.power_status) {
+          circle.attr('fill', activeColor);
+        }
+        else{
+          circle.attr('fill', '#4a4a4a');
+        }
+      }
+    } 
+    
+    if(device.name === 'lamp' && device.settings.color !== oldDevice?.settings?.color){
+      circle.attr('fill', device.settings.color ? device.settings.color : 'yellow');
+    }
   }
 
 }

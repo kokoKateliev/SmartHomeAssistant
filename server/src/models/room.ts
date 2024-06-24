@@ -10,7 +10,6 @@ export interface IRoom extends Document {
 const RoomSchema: Schema = new Schema({
   name: { type: String, required: true },
   temperature: { type: Number, required: true },
-  devices: [{ type: Schema.Types.ObjectId, ref: 'Device' }],
   familyId: { type: Schema.Types.ObjectId, ref: 'Family', required: true },
 });
 

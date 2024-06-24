@@ -1,6 +1,7 @@
 export interface Device {
     name: string;
-    device_id?: string;
+    _id?: string;
+    roomId: string;
     power_status: boolean;
     time_start: Date;
     position: {
