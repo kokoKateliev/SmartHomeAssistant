@@ -97,7 +97,7 @@ export class RoomDetailComponent {
     curtains : 'assets/curtains.png',
     airconditioner : 'assets/airconditioner.png',
     dishWasher : 'assets/dishwasher.png',
-    CoffeeMachine : 'assets/coffeemachine.png'
+    coffeeMachine : 'assets/coffeemachine.png'
   }
 
   private createSvg(url: string): void {
