@@ -1,54 +1,66 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import {
-  Auth,
-  user,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-} from '@angular/fire/auth';
-import { BehaviorSubject, Subject, catchError, map, tap } from 'rxjs';
-import { User } from '../types/data/user';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { HttpClient,HttpClientModule } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-  http = inject(HttpClient);
+  private apiUrl = 'http://localhost:8080';
+  private tokenKey = 'authToken';
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
 
-  authenticatedUser$$ = new BehaviorSubject<User | null | undefined>(undefined);
-  isLoggedIn$ = this.authenticatedUser$$.pipe(
-    map((user) => user !== null || user !== undefined)
-  );
-  isAuthenticating$ = this.authenticatedUser$$.pipe(
-    map((user) => user === undefined)
-  );
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  // auth = inject(Auth);
-  // user$ = user(this.auth);
-  // isLoggedIn$ = this.user$.pipe(map(Boolean));
+  
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-  // login(email: string, password: string) {
-  //   return signInWithEmailAndPassword(this.auth, email, password);
-  // }
+  private hasToken(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage?.getItem(this.tokenKey);
+    }
+    return false;
+  }
 
-  // register(email: string, password: string) {
-  //   return createUserWithEmailAndPassword(this.auth, email, password);
-  // }
-
-  // logout() {
-  //   return signOut(this.auth);
-  // }
-
-  authenticate() {
-    return this.http.get<User | null>('/users/adsa').pipe(
-      tap((user) => {
-        this.authenticatedUser$$.next(user);
-      }),
-      catchError(() => {
-        this.authenticatedUser$$.next(null);
-        return [];
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/login`, { email, password }).pipe(
+      tap((response: any) => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem(this.tokenKey, response.token);
+        }
+        this.isLoggedInSubject.next(true);
+        this.router.navigate(['/rooms']);
       })
     );
+  }
+
+  register(name: string, email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/register`, { name, email, password }).pipe(
+      tap((response: any) => {
+        this.router.navigate(['/login']);
+      })
+    );
+  }
+
+  logout() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage?.removeItem(this.tokenKey);
+    }
+    this.isLoggedInSubject.next(false);
+    this.router.navigate(['/login']);
+  }
+
+  getToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage?.getItem(this.tokenKey);
+    }
+    return null;
   }
 }

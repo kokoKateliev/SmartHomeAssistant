@@ -1,15 +1,23 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
+import { AsyncPipe } from '@angular/common';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
   isDay!: boolean;
+
+  authService = inject(AuthService);
+  router = inject(Router);
+
+  isLoading = false;
 
   ngOnInit(): void {
 
@@ -21,5 +29,10 @@ export class NavigationComponent {
     else{
       this.isDay = false;
     }
+  }
+
+  logoutHandler() {
+    this.isLoading = true;
+ 
   }
 }
