@@ -12,9 +12,9 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { TokenInterceptor } from './components/auth/token.interceptor';
 import { AuthService } from './components/auth/auth.service';
 import { AuthGuard } from './components/auth/auth.guard';
+import { interceptor } from './htpp_intercepror';
 
 
 const localProviders = [
@@ -24,13 +24,7 @@ const localProviders = [
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    importProvidersFrom(HttpClientModule),
-    importProvidersFrom(CommonModule),
-    // importProvidersFrom(HttpClient),
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    AuthService,
-    AuthGuard,
-    provideHttpClient(withFetch()),
-   
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([interceptor])),
   ]
 };

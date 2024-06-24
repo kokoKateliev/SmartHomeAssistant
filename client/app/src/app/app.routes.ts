@@ -10,11 +10,11 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/login',
+    redirectTo: 'dashboard',
   },
   {
     path: 'rooms',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     component: RoomManagerComponent,
     children: [
       {
@@ -37,7 +37,7 @@ export const routes: Routes = [
 
   {
     path: 'login',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     component: LoginComponent,
     data: {
       notAuthenticatedRequired: true,
@@ -46,7 +46,7 @@ export const routes: Routes = [
 
   {
     path: 'register',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     component: RegisterComponent,
     data: {
       notAuthenticatedRequired: true,

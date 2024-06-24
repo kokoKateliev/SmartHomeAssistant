@@ -19,7 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./registration.component.scss'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  providers: [AuthService,AuthGuard,HttpClientModule],
+  providers: [AuthService,HttpClientModule],
 })
 export class RegisterComponent {
   authService = inject(AuthService);
@@ -35,17 +35,20 @@ export class RegisterComponent {
   });
 
   onSubmit() {
-    if (this.registerForm.valid) {
-      const { username, email, password } = this.registerForm.value;
-      //@ts-ignore
-      this.authService.register(username, email, password).subscribe(
-        (response: any) => {
-          console.log('Registration successful', response);
-        },
-        (error: any) => {
-          console.error('Registration failed', error);
-        }
-      );
-    }
+    if (this.registerForm.invalid) return;
+    const {username, email, password } = this.registerForm.value;
+
+    // if (this.registerForm.valid) {
+    //   const { username, email, password } = this.registerForm.value;
+    //   //@ts-ignore
+    //   this.authService.register(username, email, password).subscribe(
+    //     (response: any) => {
+    //       console.log('Registration successful', response);
+    //     },
+    //     (error: any) => {
+    //       console.error('Registration failed', error);
+    //     }
+    //   );
+    // }
   }
 }

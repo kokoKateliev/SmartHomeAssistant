@@ -23,7 +23,7 @@ type LoginFormData = {
   styleUrl: './login.component.scss',
   standalone: true,
   imports: [FormsModule, CommonModule, NgIf,ReactiveFormsModule],
-  providers: [AuthService,AuthGuard,HttpClientModule],
+  providers: [AuthService,HttpClientModule],
 })
 export class LoginComponent {
   authService = inject(AuthService);
@@ -38,19 +38,22 @@ export class LoginComponent {
   isLoading = false;
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value as LoginFormData;
-      this.authService.login(email, password).subscribe(
-        (response: any) => {
-          console.log('Login successful', response);
-          this.isLoading = false;
-        },
-        (error: any) => {
-          console.error('Login failed', error);
-          this.isLoading = false;
-          this.wrongEmailOrPassword = true;
-        }
-      );
-    }
+    if (this.loginForm.invalid) return;
+    const { email, password } = this.loginForm.value as LoginFormData;
+    this.isLoading = true;
+    // if (this.loginForm.valid) {
+    //   const { email, password } = this.loginForm.value as LoginFormData;
+    //   this.authService.login(email, password).subscribe(
+    //     (response: any) => {
+    //       console.log('Login successful', response);
+    //       this.isLoading = false;
+    //     },
+    //     (error: any) => {
+    //       console.error('Login failed', error);
+    //       this.isLoading = false;
+    //       this.wrongEmailOrPassword = true;
+    //     }
+    //   );
+    // }
   }
 }

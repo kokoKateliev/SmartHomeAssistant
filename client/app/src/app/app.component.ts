@@ -16,16 +16,23 @@ import { AuthService } from './components/auth/auth.service';
 })
 export class AppComponent{
   title="app";
-  isLoggedIn = false;
+  // isLoggedIn = false;
 
-  authService=inject(AuthService);
+  // authService=inject(AuthService);
 
-  ngOnInit() {
-    this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
-  }
+  // ngOnInit() {
+  //   this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
+  // }
 
-  logout() {
-    this.authService.logout();
+  // logout() {
+  //   this.authService.logout();
+  // }
+
+  authService = inject(AuthService);
+  isAuthenticating$ = this.authService.isAuthenticating$;
+
+  ngOnInit(): void {
+    this.authService.authenticate().subscribe();
   }
 }
 

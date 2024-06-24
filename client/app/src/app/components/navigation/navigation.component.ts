@@ -15,10 +15,10 @@ import { LoginComponent } from '../auth/login/login.component';
 export class NavigationComponent {
   isDay!: boolean;
 
-  authService = inject(AuthService);
-  router = inject(Router);
+  // authService = inject(AuthService);
+  // router = inject(Router);
 
-  isLogged$ = this.authService.isLoggedIn$;
+  // isLogged$ = this.authService.isLoggedIn$;
 
 
   ngOnInit(): void {
@@ -29,5 +29,14 @@ export class NavigationComponent {
     } else {
       this.isDay = false;
     }
+  }
+
+  authService = inject(AuthService);
+  router = inject(Router);
+
+  isLoading = false;
+
+  logoutHandler() {
+    this.isLoading = true;
   }
 }

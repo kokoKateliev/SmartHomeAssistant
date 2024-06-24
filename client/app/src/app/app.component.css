@@ -3,7 +3,8 @@ app-root {
 }
 
 app-navigation {
-    width: 100%;
+    width: 5%;
+    height: 100%;
     display: flex;
     margin-right: 3%;
 }
