@@ -8,7 +8,6 @@ Technologies Used:
    - D3 library
 * Node.js
 * MongoDB
-* 
 
 Key Features:
 * User Profile Creation:
