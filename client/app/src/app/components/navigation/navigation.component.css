@@ -29,3 +29,20 @@ div {
   
 }
 
+#auth{
+  justify-content: center;
+  padding: 20px;
+}
+
+a{
+  margin: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: larger;
+  font-weight: 550;
+  margin-bottom: 30px;
+}
+
+a:hover{
+  font-size: x-large;
+}

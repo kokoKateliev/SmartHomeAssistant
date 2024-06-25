@@ -26,6 +26,7 @@ export class RegisterComponent {
   formSubmitHandler(): void {
     if (this.registerForm.invalid) return;
     let { email, password, firstName, lastName, uniqueCode } = this.registerForm.value;
+    console.log(email)
     if(!uniqueCode)
       uniqueCode = undefined;
     this.authService.register(email!, password!, firstName!, lastName!, uniqueCode);

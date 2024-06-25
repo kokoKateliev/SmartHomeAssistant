@@ -1,3 +1,4 @@
+<div id="loginForm">
 <h2>Login</h2>
 <form #loginForm="ngForm" (ngSubmit)="formSubmitHandler()">
   <div *ngIf="isLoading">Loading...</div>
@@ -45,7 +46,7 @@
   <div *ngIf="wrongEmailOrPassword">Wrong email or password!</div>
 </form>
 
-
+</div>
 <!-- 
   const p1 = createHtmlElement('form');
   attachDirectives(p1, [ngForm]);

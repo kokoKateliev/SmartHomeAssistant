@@ -1,4 +1,4 @@
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,11 +25,13 @@ export class LoginComponent {
   isLoading = false;
 
   formSubmitHandler(): void {
+    console.log("helooo")
     if (this.loginForm.invalid) return;
     const { email, password } = this.loginForm.value as LoginFormData;
     this.isLoading = true;
     this.authService.login(email, password);
     this.authService.isLoggedIn.subscribe(isLogged => {
+      console.log(isLogged)
       if (isLogged) {
         this.isLoading = false;
         this.router.navigate(['/rooms']);

@@ -11,6 +11,7 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { authGuard } from './components/auth/auth.guard';
 import { FamilyMembersComponent } from './components/family-members/family-members.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { JoinFamilyComponent } from './components/join-family/join-family.component';
 
 // import { authGuard } from './auth/auth.guard';
 // import { ManagerComponent } from './manager/manager.component';
@@ -31,12 +32,12 @@ export const routes: Routes = [
   },
 
   {
-  path: 'register',
-  component: RegisterComponent,
-  // canActivate: [authGuard],
-  // data: {
-  //     notAuthenticatedRequired: true,
-  //  },
+    path: 'register',
+    component: RegisterComponent,
+    // canActivate: [authGuard],
+    // data: {
+    //     notAuthenticatedRequired: true,
+    //  },
   },
   {
     path: 'family',
@@ -47,67 +48,70 @@ export const routes: Routes = [
     //  },
   },
   {
-  path: 'rooms',
-  // canActivate: [authGuard],
-  component: RoomManagerComponent,
-  children: [
-              {
-                path: ':_id',
-                component: RoomDetailComponent,
-                children: [
-                  {
-                    path: ':controller',
-                    component: DeviceControllerComponent
-                  }
-                ]
-              },
+    path: 'rooms',
+    // canActivate: [authGuard],
+    component: RoomManagerComponent,
+    children: [
+      {
+        path: ':_id',
+        component: RoomDetailComponent,
+        children: [
+          {
+            path: ':controller',
+            component: DeviceControllerComponent,
+          },
+        ],
+      },
     ],
   },
-    {
-        path: 'profile',
-        // canActivate: [authGuard],
-        component: ProfileComponent
-    }
+  { path: 'join-family',
+     component: JoinFamilyComponent },
 
-    // {
-    //     path: 'todos',
-    //     // canActivate: [authGuard],
-    //     component: TodosComponent,
+  {
+    path: 'profile',
+    // canActivate: [authGuard],
+    component: ProfileComponent,
+  },
 
-    //     children: [
-    //         {
-    //           path: ':member',
-    //           component: TodoDialogComponent,
-    //         },
-    //       ],
-    // },
+  // {
+  //     path: 'todos',
+  //     // canActivate: [authGuard],
+  //     component: TodosComponent,
 
-    // {
-    //     path: 'assistant',
-    //     // canActivate: [authGuard],
-    //     component: HomeAssistantComponent
-    // },
+  //     children: [
+  //         {
+  //           path: ':member',
+  //           component: TodoDialogComponent,
+  //         },
+  //       ],
+  // },
 
-    // {
-    //     path: 'manager',
-    //     // canActivate: [authGuard],
-    //     component: ManagerComponent,
-    //     children: [
-    //       {
-    //         path: ':room',
-    //         component: TodoDialogComponent,
-    //       },
-    //     ]
-    // },
+  // {
+  //     path: 'assistant',
+  //     // canActivate: [authGuard],
+  //     component: HomeAssistantComponent
+  // },
 
-    // {
-    //     path: 'schedular',
-    //     // canActivate: [authGuard],
-    //     component: SchedularComponent
-    // },
+  // {
+  //     path: 'manager',
+  //     // canActivate: [authGuard],
+  //     component: ManagerComponent,
+  //     children: [
+  //       {
+  //         path: ':room',
+  //         component: TodoDialogComponent,
+  //       },
+  //     ]
+  // },
 
-    // {
-    // path: '**',
-    // component: NotFoundComponent,
-    // },
+  // {
+  //     path: 'schedular',
+  //     // canActivate: [authGuard],
+  //     component: SchedularComponent
+  // },
+
+  // {
+  // path: '**',
+  // component: NotFoundComponent,
+  // },
 ];

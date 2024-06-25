@@ -1,0 +1,30 @@
+<div class="join-family-container">
+    <h2>Join Family</h2>
+    <form [formGroup]="joinFamilyForm" (ngSubmit)="joinFamily()">
+      <div>
+        <label for="familyId">Family ID</label>
+        <input id="familyId" formControlName="familyId" type="text" />
+        <div *ngIf="joinFamilyForm.get('familyId')?.errors" class="errors">
+          <div *ngIf="joinFamilyForm.get('familyId')?.errors?.['required']">
+            Family ID is required
+          </div>
+        </div>
+      </div>
+      <button type="submit" [disabled]="joinFamilyForm.invalid">Join Family</button>
+    </form>
+  
+    <h2>Create Family</h2>
+    <form [formGroup]="createFamilyForm" (ngSubmit)="createFamily()">
+      <div>
+        <label for="familyName">Family Name</label>
+        <input id="familyName" formControlName="familyName" type="text" />
+        <div *ngIf="createFamilyForm.get('familyName')?.errors" class="errors">
+          <div *ngIf="createFamilyForm.get('familyName')?.errors?.['required']">
+            Family name is required
+          </div>
+        </div>
+      </div>
+      <button type="submit" [disabled]="createFamilyForm.invalid">Create Family</button>
+    </form>
+  </div>
+  

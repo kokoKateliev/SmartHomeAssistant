@@ -39,6 +39,17 @@ export class AuthService implements OnDestroy {
     });
   }
 
+  autenticate(){
+    this.userSubscription = this.userBSubject.subscribe(isUser => {
+      if(isUser){
+        this.isLoggedIn.next(true);
+      }
+      else{
+        this.isLoggedIn.next(false);
+      }
+    });
+  }
+
   ngOnDestroy() {
     this.userSubscription?.unsubscribe();
   }
@@ -51,6 +62,7 @@ export class AuthService implements OnDestroy {
     this.http.post<User>('http://localhost:8080/users/login', user).subscribe( user => {
       if(user){
         this.userBSubject.next(user);
+        this.autenticate()
       }
     });
   }
