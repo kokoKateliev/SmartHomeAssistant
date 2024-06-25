@@ -1,6 +1,15 @@
 # SmartHomeAssistant
 
 University project with collaborator Nikol Nikolaeva. Team web project for Smart Device Management. The Smart Home Assistant is an innovative project designed to seamlessly manage and control smart devices within a home environment. This comprehensive system offers users the ability to create personalized profiles, manage family settings, and efficiently control various smart devices throughout their residence.    
+
+Technologies Used: 
+* Angular
+   - RxJS
+   - D3 library
+* Node.js
+* MongoDB
+* 
+
 Key Features:
 * User Profile Creation:
 
