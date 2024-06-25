@@ -28,12 +28,12 @@ export class RoomsService {
     return this.roomsBSubject.value.find(room => room._id === roomId);
   }
 
-  // addRoom(room: Room): void {
-  //   this.saveRoomToDatabase(room).subscribe((savedRoom: Room) => {
-  //     const currentRooms = this.roomsSubject.value;
-  //     this.roomsSubject.next([...currentRooms, savedRoom]);
-  //   });
-  // }
+  addRoom(room: Room): void {
+    this.saveRoomToDatabase(room).subscribe((savedRoom: Room) => {
+      const currentRooms = this.roomsBSubject.value;
+      this.roomsBSubject.next([...currentRooms, savedRoom]);
+    });
+  }
 
   // updateRoom(updatedRoom: Room): void {
   //   this.saveRoomToDatabase(updatedRoom).subscribe((savedRoom: Room) => {
@@ -44,12 +44,8 @@ export class RoomsService {
   //   });
   // }
 
-  // private saveRoomToDatabase(room: Room) {
-  //   if (room.room_id) {
-  //     return this.http.put<Room>(`/api/room/${room.room_id}`, room);
-  //   } else {
-  //     return this.http.post<Room>('/api/room', room);
-  //   }
-  // }
+  private saveRoomToDatabase(room: Room) {
+    return this.http.post<Room>('http://localhost:8080/rooms/', room);
+  }
 
 }

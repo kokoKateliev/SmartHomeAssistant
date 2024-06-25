@@ -38,7 +38,7 @@ export const routes: Routes = [
   },
   {
   path: 'rooms',
-  canActivate: [authGuard],
+  // canActivate: [authGuard],
   component: RoomManagerComponent,
   children: [
               {

@@ -106,7 +106,7 @@ export class RoomDetailComponent {
         .append("svg")
         .attr("width", this.roomWidth)
         .attr("height", this.roomHeight)
-        .attr("_id", this.room._id)
+        .attr("_id", this.room._id!)
         .style("background-image", url)
         .style("background-repeat", "no-repeat")
         .style("backgroind-position", "center")
@@ -131,7 +131,7 @@ export class RoomDetailComponent {
     const [x, y] = d3.pointer(event);
 
     const newDevice: Device = {
-      roomId: this.room!._id,
+      roomId: this.room!._id!,
       settings: {},
       position: { x, y },
       name: this.selectedElement,

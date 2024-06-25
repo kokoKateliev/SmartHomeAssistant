@@ -10,7 +10,7 @@
     border-radius: 15px;
 }
 
-.room-buttons-container button {
+.room-buttons-container button, form button {
     background-color: #414141;
     color: #E4E6EB;
     font-size: 20px;
@@ -24,7 +24,7 @@
 }
 
 
-.room-buttons-container button:hover {
+.room-buttons-container button:hover, form button:hover {
     background-color: #636363;
     transform: scale(1.1);
 }
@@ -42,4 +42,53 @@
 
 app-room-detail {
     width: 100%;
+}
+
+.form-popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+form{
+    font-size: 24px;
+    padding: 2%;
+    width: 30%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    background-color: #222222;
+    border-radius: 15px;
+}
+
+form div {
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+}
+
+form div button {
+    width: 35%;
+}
+
+form select {
+    width: 50%;
+    border: none;
+    outline: none;
+    background-color: DodgerBlue;
+    color: white;
+    border-radius: 5px;
+    padding: 3%;
+    font-size: 20px;
 }
