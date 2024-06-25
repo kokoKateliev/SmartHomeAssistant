@@ -1,0 +1,30 @@
+.container { 
+    display: flex;
+    flex-direction: column;
+
+    background-color: #222222;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+.family-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.family-code {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}
+
+.family-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    
+}

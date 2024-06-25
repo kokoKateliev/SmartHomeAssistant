@@ -1,0 +1,20 @@
+@if(family){
+<div class="container">
+    <p>Family: <span class="family-name">{{family.familyName}}</span></p>
+    <div class="family-code">
+        <p>If you want to add more members, send them this code: </p>
+        <h2>{{family._id}}</h2>
+    </div>
+    
+    <div class="family-container">
+        @for(user of family.users; track family) {
+            <div class="family-member">
+                <p>{{user.firstName}} {{user.lastName}}</p>
+            </div>
+        }
+    </div>
+</div>
+}
+@else {
+    <p>You are not part of a family. Please register one or join in one.</p>
+}

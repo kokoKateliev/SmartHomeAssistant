@@ -9,6 +9,7 @@ import { DeviceControllerComponent } from './components/device-controller/device
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { authGuard } from './components/auth/auth.guard';
+import { FamilyMembersComponent } from './components/family-members/family-members.component';
 
 // import { authGuard } from './auth/auth.guard';
 // import { ManagerComponent } from './manager/manager.component';
@@ -35,6 +36,14 @@ export const routes: Routes = [
   // data: {
   //     notAuthenticatedRequired: true,
   //  },
+  },
+  {
+    path: 'family',
+    component: FamilyMembersComponent,
+    // canActivate: [authGuard],
+    // data: {
+    //     notAuthenticatedRequired: true,
+    //  },
   },
   {
   path: 'rooms',

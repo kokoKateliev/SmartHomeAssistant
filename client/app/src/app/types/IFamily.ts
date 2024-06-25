@@ -3,6 +3,6 @@ import { User } from './IUser';
 
 export interface Family {
   users: User[];
-  family_id: string;
+  _id: string;
   familyName: string;
 }
