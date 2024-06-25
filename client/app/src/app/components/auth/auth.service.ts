@@ -48,7 +48,7 @@ export class AuthService implements OnDestroy {
       email: email,
       password: password,
     };
-    this.http.post<User>('http://localhost:8080/login', user).subscribe( user => {
+    this.http.post<User>('http://localhost:8080/users/login', user).subscribe( user => {
       if(user){
         this.userBSubject.next(user);
       }
@@ -63,17 +63,25 @@ export class AuthService implements OnDestroy {
       lastName: lastName,
       uniqueCode: uniqueCode,
     };
-    this.http.post<User>('http://localhost:8080/register', user).subscribe( user => {
+    this.http.post<User>('http://localhost:8080/users/register', user).subscribe( user => {
       if(user){
         this.userBSubject.next(user);
       }
     });
   }
 
+  updateUser(user: User) {
+    this.http.put<User>('http://localhost:8080/users', user).subscribe( user => {
+      if(user) {
+        this.userBSubject.next(user);
+      }
+    })
+  }
+  
   logout() {
-    // return new Promise((resolve) => {
-    //   this.user$$.next(null);
-    //   resolve(null);
-    // });
+    return new Promise((resolve) => {
+      this.userBSubject.next(null);
+      resolve(null);
+    });
   }
 }

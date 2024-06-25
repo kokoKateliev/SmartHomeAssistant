@@ -1,1 +1,45 @@
-<p>profile works!</p>
+<!-- export interface User {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email:string;
+    password: string;
+    family_id: string;
+  }
+   -->
+  
+   <div class="container">
+@if(user){
+    <form [formGroup]="userForm" (ngSubmit)="formSubmitHandler()">
+        <div class="names">
+            <div class="form-group">
+                <label for="firstName">Fist Name</label>
+                <input type="text" id="firstName" formControlName="firstName" />
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" formControlName="lastName" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email"></label>
+            <input type="text" id="email" formControlName="email" />
+            @if(userForm.get("email")?.errors; as emailErrors) {
+            <div class="errors">
+            @if(emailErrors?.['required']) { Email is required }
+            @if(emailErrors?.['email']) { Email is invalid }
+            </div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="uniqueCode">Part of Family with id:</label>
+            <input type="text" id="uniqueCode" formControlName="uniqueCode" />
+        </div>
+        <button>Update</button>
+        </form>
+        
+    }
+    @else {
+        <p> No user found</p>
+    }
+</div>

@@ -10,6 +10,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { authGuard } from './components/auth/auth.guard';
 import { FamilyMembersComponent } from './components/family-members/family-members.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 // import { authGuard } from './auth/auth.guard';
 // import { ManagerComponent } from './manager/manager.component';
@@ -62,11 +63,11 @@ export const routes: Routes = [
               },
     ],
   },
-    // {
-    //     path: 'profile',
-    //     canActivate: [authGuard]
-    //     component: ProfileComponent
-    // }
+    {
+        path: 'profile',
+        // canActivate: [authGuard],
+        component: ProfileComponent
+    }
 
     // {
     //     path: 'todos',
