@@ -26,4 +26,8 @@ export class NavigationComponent {
       this.isDay = false;
     }
   }
+
+  public logout(){
+    this.authService.logout()
+  }
 }

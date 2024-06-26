@@ -4,6 +4,7 @@ import { Inject, Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription, map, of } from 'rxjs';
 import { User } from '../../types/IUser';
 import { routes } from '../../app.routes';
+import { Router } from '@angular/router';
 
 interface IUser {
   email: string;
@@ -23,6 +24,7 @@ interface IRegister {
 })
 export class AuthService implements OnDestroy {
   http = inject(HttpClient);
+  router=inject(Router)
 
   userBSubject = new BehaviorSubject<User | null>(null);
   isLoggedIn = new Subject<boolean>();
@@ -63,7 +65,7 @@ export class AuthService implements OnDestroy {
     this.http.post<User>('http://localhost:8080/users/login', user).subscribe( user => {
       if(user){
         this.userBSubject.next(user);
-        this.autenticate()
+        localStorage.setItem("user_session", user._id);
       }
     });
   }
@@ -95,7 +97,9 @@ export class AuthService implements OnDestroy {
   logout() {
     return new Promise((resolve) => {
       this.userBSubject.next(null);
-      resolve(null);
+      localStorage.removeItem("user_session");
+      //resolve(null);
+      this.router.navigate(["/login"])
     });
   }
 }

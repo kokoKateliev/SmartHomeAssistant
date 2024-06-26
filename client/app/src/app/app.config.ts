@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(CommonModule),
-   // provideHttpClient(withFetch()),
+  //  provideHttpClient(withFetch()),
     provideHttpClient(withInterceptors([interceptor])),
    
     // ...localProviders

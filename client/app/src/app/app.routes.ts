@@ -10,8 +10,6 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { authGuard } from './components/auth/auth.guard';
 import { FamilyMembersComponent } from './components/family-members/family-members.component';
-// import { ProfileComponent } from './components/profile/profile.component';
-// import { JoinFamilyComponent } from './components/join-family/join-family.component';
 
 // import { authGuard } from './auth/auth.guard';
 // import { ManagerComponent } from './manager/manager.component';
@@ -26,30 +24,30 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     // canActivate: [authGuard],
-    // data: {
-    //     notAuthenticatedRequired: true,
-    // },
+    data: {
+        notAuthenticatedRequired: true,
+    },
   },
 
   {
     path: 'register',
     component: RegisterComponent,
     // canActivate: [authGuard],
-    // data: {
-    //     notAuthenticatedRequired: true,
-    //  },
+    data: {
+        notAuthenticatedRequired: true,
+     },
   },
   {
     path: 'family',
     component: FamilyMembersComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     // data: {
     //     notAuthenticatedRequired: true,
     //  },
   },
   {
     path: 'rooms',
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     component: RoomManagerComponent,
     children: [
       {
