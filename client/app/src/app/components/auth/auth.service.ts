@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription, map, of } from 'rxjs';
 import { User } from '../../types/IUser';
+import { routes } from '../../app.routes';
 
 interface IUser {
   email: string;
@@ -78,6 +79,7 @@ export class AuthService implements OnDestroy {
     this.http.post<User>('http://localhost:8080/users/register', user).subscribe( user => {
       if(user){
         this.userBSubject.next(user);
+  
       }
     });
   }

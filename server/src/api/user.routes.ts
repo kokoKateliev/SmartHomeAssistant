@@ -75,12 +75,7 @@ router.post("/login", async (req, res) => {
     if (req.body.password !== userExist.password) {
       return res.status(400).send("Invalid Password");
     }
-    const familyExist = await Family.findOne({
-      uniqueCode: req.body.uniqueCode,
-    });
-    if (!familyExist) return res.status(400).send("Wrong family code!");
 
-    await userExist.save();
     res.status(200).send(userExist);
   } catch (error: any) {
     res.status(500).send(error.message);
@@ -90,32 +85,33 @@ router.post("/login", async (req, res) => {
 // Register endpoint
 router.post("/register", async (req, res) => {
   try {
-    const { error } = registerValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    // const { error } = registerValidation(req.body);
+    // if (error) return res.status(400).send(error.details[0].message);
 
     const emailExist = await User.findOne({
       email: req.body.email,
     });
     if (emailExist) return res.status(400).send("Email already exists");
 
-    const familyExist = await Family.findOne({
-      uniqueCode: req.body.uniqueCode,
-    });
-    if (!familyExist) return res.status(400).send("Family does not exist");
+    let familyExist;
+    if (req.body.uniqueCode) {
+      familyExist = await Family.findOne({
+        uniqueCode: req.body.uniqueCode,
+      });
+      if (!familyExist) return res.status(400).send("Family does not exist");
 
-    const userInFamily = await User.findOne({
-      email: req.body.email,
-      family: familyExist._id,
-    });
+      // const userInFamily = await User.findOne({
+      //   email: req.body.email,
+      //   family: familyExist?._id,
+      // });
+    }
 
-    // If the user already exists in the family, return an error
-    if (userInFamily)
-      return res.status(400).send("User already exists in the family");
     const user = new User({
-      username: req.body.username,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       email: req.body.email,
       password: req.body.password,
-      family: familyExist,
+      familyId: familyExist?.id,
     });
 
     const savedUser = await user.save();

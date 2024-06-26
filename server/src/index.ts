@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 
 // DB connection -----------------------------------
-const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.uzdurwg.mongodb.net/?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.uzdurwg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose.connect(url)
   .then(() => console.log('Connected to db!'))
   .catch((err)=>console.log(err));

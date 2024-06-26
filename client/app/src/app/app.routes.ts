@@ -10,8 +10,8 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { authGuard } from './components/auth/auth.guard';
 import { FamilyMembersComponent } from './components/family-members/family-members.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { JoinFamilyComponent } from './components/join-family/join-family.component';
+// import { ProfileComponent } from './components/profile/profile.component';
+// import { JoinFamilyComponent } from './components/join-family/join-family.component';
 
 // import { authGuard } from './auth/auth.guard';
 // import { ManagerComponent } from './manager/manager.component';
@@ -62,16 +62,19 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: ':email',
+        component: RoomDetailComponent,
+      },
     ],
   },
-  { path: 'join-family',
-     component: JoinFamilyComponent },
+  // { path: 'join-family', component: JoinFamilyComponent },
 
-  {
-    path: 'profile',
-    // canActivate: [authGuard],
-    component: ProfileComponent,
-  },
+  // {
+  //   path: 'profile',
+  //   // canActivate: [authGuard],
+  //   component: ProfileComponent,
+  // },
 
   // {
   //     path: 'todos',

@@ -2,10 +2,11 @@ const Joi = require("joi");
 
 // Define validation schema for registration
 const registerSchema = Joi.object({
-  username: Joi.string().min(3).required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().min(3).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(4).required(),
-  uniqueCode: Joi.string().required()
+  uniqueCode: Joi.string()
 });
 
 // Function to validate registration data

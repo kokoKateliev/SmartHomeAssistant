@@ -1,7 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,7 +14,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   authService = inject(AuthService);
@@ -25,11 +30,16 @@ export class RegisterComponent {
 
   formSubmitHandler(): void {
     if (this.registerForm.invalid) return;
-    let { email, password, firstName, lastName, uniqueCode } = this.registerForm.value;
-    console.log(email)
-    if(!uniqueCode)
-      uniqueCode = undefined;
-    this.authService.register(email!, password!, firstName!, lastName!, uniqueCode);
-      
+    let { email, password, firstName, lastName, uniqueCode } =
+      this.registerForm.value;
+    if (!uniqueCode) uniqueCode = undefined;
+    this.authService.register(
+      this.registerForm.value.email!,
+      this.registerForm.value.password!,
+      this.registerForm.value.firstName!,
+      this.registerForm.value.lastName!,
+      this.registerForm.value.uniqueCode!
+    );
+    this.router.navigate(['/login']);
   }
 }
