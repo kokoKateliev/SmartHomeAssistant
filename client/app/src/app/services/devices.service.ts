@@ -37,7 +37,10 @@ export class DevicesService {
 
   addNewDevice(device: Device) {
     this.saveDeviceToDatabase(device, true).subscribe((savedDevice: Device) => {
-      const currentDevices = this.devicesBSubject.value;
+      let currentDevices = this.devicesBSubject.value;
+      if(!currentDevices) {
+        currentDevices = [];
+      }
       this.devicesBSubject.next([...currentDevices, savedDevice]);
       this.addedDeviceSubject.next(savedDevice);
     });

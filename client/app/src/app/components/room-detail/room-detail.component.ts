@@ -47,11 +47,14 @@ export class RoomDetailComponent {
         // this.clearSvg();
         this.devicesService.getDevicesFromRoom(this.roomId);
         this.deviceSubscr = this.devicesService.devicesBSubject.subscribe(data => {
-          const newDevices = data.filter(el => el.roomId === this.roomId)
-          if(this.roomId && data.length){
-            this.devices = newDevices;
-            if(!this.areShownDevices){
-              this.loadDevicesOnSvg();
+          if(data){
+            console.log("Inside devicesBSubject")
+            const newDevices = data.filter(el => el.roomId === this.roomId)
+            if(this.roomId && data.length){
+              this.devices = newDevices;
+              if(!this.areShownDevices){
+                this.loadDevicesOnSvg();
+              }
             }
           }
         });
@@ -152,7 +155,7 @@ export class RoomDetailComponent {
     };
 
     this.devicesService.addNewDevice(newDevice);
-    this.devicesService.addedDeviceSubject.subscribe(device => {
+    const subscr = this.devicesService.addedDeviceSubject.subscribe(device => {
       if(device){      
         const group = this.svg.append('g')
         .attr('transform', `translate(${x},${y})`)
@@ -190,6 +193,7 @@ export class RoomDetailComponent {
         .attr('y', -15);
       
       this.selectedElement = null;
+      subscr.unsubscribe();
       }
     });
   }
