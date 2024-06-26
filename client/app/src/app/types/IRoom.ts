@@ -1,6 +1,6 @@
 export interface Room {
   _id?: string;
-  // family_id: string;
+  userId: string;
   name: string;
   temperature: number;
   // devices: Device[];

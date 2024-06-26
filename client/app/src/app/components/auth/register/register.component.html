@@ -32,6 +32,7 @@
     <label for="uniqueCode">Family Id</label>
     <input type="text" id="uniqueCode" formControlName="uniqueCode" />
   </div>
-  <button  onclick="formSubmitHandler()">Register</button>
+  <button [disabled]="registerForm.invalid" >Register</button>
+  <div type="submit" *ngIf="wrongEmailOrPassword">Wrong email or password!</div>
 </form>
 </div>

@@ -1,4 +1,3 @@
-import { Room } from './IRoom';
 import { User } from './IUser';
 
 export interface Family {

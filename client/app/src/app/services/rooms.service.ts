@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Room } from '../types/IRoom';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoomsService {
   http = inject(HttpClient);
@@ -12,7 +12,9 @@ export class RoomsService {
   roomsBSubject = new BehaviorSubject<Room[]>([]);
 
   loadRooms(): void {
-      this.http.get<Room[]>('http://localhost:8080/rooms/').subscribe((rooms: Room[]) => {
+    this.http
+      .get<Room[]>(`http://localhost:8080/rooms/user/${localStorage.getItem("user_session")}`)
+      .subscribe((rooms: Room[]) => {
         this.roomsBSubject.next(rooms);
       });
   }
@@ -22,10 +24,10 @@ export class RoomsService {
   }
 
   getRoomDetail(roomId: string): Room | undefined {
-    if(!this.roomsBSubject.value.length){
+    if (!this.roomsBSubject.value.length) {
       this.loadRooms();
     }
-    return this.roomsBSubject.value.find(room => room._id === roomId);
+    return this.roomsBSubject.value.find((room) => room._id === roomId);
   }
 
   addRoom(room: Room): void {
@@ -45,7 +47,6 @@ export class RoomsService {
   // }
 
   private saveRoomToDatabase(room: Room) {
-    return this.http.post<Room>('http://localhost:8080/rooms/', room);
+    return this.http.post<Room>(`http://localhost:8080/rooms`, room);
   }
-
 }

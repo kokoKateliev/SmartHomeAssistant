@@ -91,7 +91,8 @@ router.post("/register", async (req, res) => {
     const emailExist = await User.findOne({
       email: req.body.email,
     });
-    if (emailExist) return res.status(400).send("Email already exists");
+    if (emailExist) return res.status(400).json({ message: "Email already exists", user: null });
+    ;
 
     let familyExist;
     if (req.body.uniqueCode) {
@@ -99,11 +100,6 @@ router.post("/register", async (req, res) => {
         uniqueCode: req.body.uniqueCode,
       });
       if (!familyExist) return res.status(400).send("Family does not exist");
-
-      // const userInFamily = await User.findOne({
-      //   email: req.body.email,
-      //   family: familyExist?._id,
-      // });
     }
 
     const user = new User({

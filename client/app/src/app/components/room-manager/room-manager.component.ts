@@ -48,6 +48,7 @@ export class RoomManagerComponent {
   addRoom() {
     const { roomName, temperature } = this.roomForm.value;
     const newRoom: Room = {
+      userId: localStorage.getItem("user_session")!,
       name: roomName!,
       temperature: temperature!
     }

@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 export class RegisterComponent {
   authService = inject(AuthService);
   router = inject(Router);
+  wrongEmailOrPassword = false;
 
   registerForm = new FormGroup({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
@@ -33,13 +34,20 @@ export class RegisterComponent {
     let { email, password, firstName, lastName, uniqueCode } =
       this.registerForm.value;
     if (!uniqueCode) uniqueCode = undefined;
-    this.authService.register(
+    try{
+    const err=this.authService.register(
       this.registerForm.value.email!,
       this.registerForm.value.password!,
       this.registerForm.value.firstName!,
       this.registerForm.value.lastName!,
       this.registerForm.value.uniqueCode!
     );
+    this.wrongEmailOrPassword = false;
+  }
+  catch{
+    this.wrongEmailOrPassword = true;
+
+  }
     this.router.navigate(['/login']);
   }
 }
