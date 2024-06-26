@@ -8,6 +8,7 @@ import { DevicesService } from '../../services/devices.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RoomsService } from '../../services/rooms.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-room-detail',
@@ -23,24 +24,32 @@ export class RoomDetailComponent {
 
   areLoadedDevices: boolean = false;
   areShownDevices: boolean = false;
+  isRoomInitDevices: boolean = false;
 
   route = inject(ActivatedRoute);
   roomsService = inject(RoomsService);
   devicesService = inject(DevicesService);
 
+  deviceSubscr?: Subscription;
+  roomSubscr?: Subscription;
+
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.roomId = params.get('_id');
       if (this.roomId) {
-        this.roomsService.roomsBSubject.subscribe(data => {
+        this.roomSubscr = this.roomsService.roomsBSubject.subscribe(data => {
           this.room = data.find(room => room._id === this.roomId);
           this.initializeRoom();
+          this.areShownDevices = false;
+          this.isRoomInitDevices = true;
         });
         
+        this.clearSvg();
         this.devicesService.getDevicesFromRoom(this.roomId);
-        this.devicesService.devicesBSubject.subscribe(data => {
+        this.deviceSubscr = this.devicesService.devicesBSubject.subscribe(data => {
+          const newDevices = data.filter(el => el.roomId === this.roomId)
           if(this.roomId && data.length){
-            this.devices = data;
+            this.devices = newDevices;
             if(!this.areShownDevices){
               this.loadDevicesOnSvg();
             }
@@ -56,16 +65,16 @@ export class RoomDetailComponent {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['devices']) {
-      // this.updateSelectedDevice();
-    }
-  }
-
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    
+    if(this.deviceSubscr) {
+      this.deviceSubscr.unsubscribe();
+
+    }
+    if(this.roomSubscr) {
+      this.roomSubscr.unsubscribe();
+    }
   }
 
   initializeRoom(): void {
@@ -247,7 +256,7 @@ export class RoomDetailComponent {
     this.areShownDevices = true;
 
     if (this.devices.length) {
-      // this.clearSvg();
+      this.clearSvg();
       this.devices.forEach(data => {
         const group = this.svg.append('g')
           .attr('transform', `translate(${data.position.x},${data.position.y})`)
@@ -289,8 +298,8 @@ export class RoomDetailComponent {
   }
   
   private clearSvg(): void {
-    if(this.svg.selectAll('g')){
-      this.svg.selectAll('g').remove();
+    if(d3.select("svg")) {
+      d3.select("svg").selectChildren().remove();
     }
   }
 

@@ -23,6 +23,10 @@ export class DevicesService {
         if(devices && devices.length !== 0){
           this.devicesBSubject.next(devices);
         }
+        else{
+          this.devicesBSubject.next([]);
+          this.devicesBSubject.next(devices);
+        }
       });
     }
   }
