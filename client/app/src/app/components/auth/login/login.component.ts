@@ -24,21 +24,21 @@ export class LoginComponent {
   wrongEmailOrPassword = false;
   isLoading = false;
 
-  formSubmitHandler(): void {
-    console.log("helooo")
+  formSubmitHandler() {
+    this.isLoading = true;
+
     if (this.loginForm.invalid) return;
     const { email, password } = this.loginForm.value as LoginFormData;
-    this.isLoading = true;
     this.authService.login(email, password);
     this.authService.isLoggedIn.subscribe(isLogged => {
-      console.log(isLogged)
       if (isLogged) {
-        this.isLoading = false;
         this.router.navigate(['/rooms']);
-      } else {
         this.isLoading = false;
+      } else {
         this.wrongEmailOrPassword = true;
+        this.isLoading = false;
       }
     });
+    
   }
 }

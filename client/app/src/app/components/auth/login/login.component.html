@@ -42,8 +42,8 @@
       </ng-container>
     </div>
   </div>
-  <button [disabled]="loginForm.invalid || isLoading">Login</button>
-  <div *ngIf="wrongEmailOrPassword">Wrong email or password!</div>
+  <button [disabled]="isLoading">Login</button>
+  <div type="submit" *ngIf="wrongEmailOrPassword">Wrong email or password!</div>
 </form>
 
 </div>
