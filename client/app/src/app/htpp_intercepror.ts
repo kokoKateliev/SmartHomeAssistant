@@ -1,6 +1,6 @@
 import { HttpHeaders, HttpInterceptorFn } from '@angular/common/http';
 
-const API_URL = 'https://jsonplaceholder.typicode.com';
+const API_URL = 'http://localhost:8080';
 
 export const interceptor: HttpInterceptorFn = (req, next) => {
   let headers = new HttpHeaders();

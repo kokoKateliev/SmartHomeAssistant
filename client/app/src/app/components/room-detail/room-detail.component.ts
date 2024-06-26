@@ -44,7 +44,7 @@ export class RoomDetailComponent {
           this.isRoomInitDevices = true;
         });
         
-        this.clearSvg();
+        // this.clearSvg();
         this.devicesService.getDevicesFromRoom(this.roomId);
         this.deviceSubscr = this.devicesService.devicesBSubject.subscribe(data => {
           const newDevices = data.filter(el => el.roomId === this.roomId)
@@ -256,7 +256,7 @@ export class RoomDetailComponent {
     this.areShownDevices = true;
 
     if (this.devices.length) {
-      this.clearSvg();
+      // this.clearSvg();
       this.devices.forEach(data => {
         const group = this.svg.append('g')
           .attr('transform', `translate(${data.position.x},${data.position.y})`)
