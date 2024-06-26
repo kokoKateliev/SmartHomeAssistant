@@ -101,6 +101,9 @@ export class RoomDetailComponent {
   }
 
   private createSvg(url: string): void {
+    if(d3.select("figure#room")) {
+      d3.select("figure#room").selectChildren().remove();
+    }
     if(this.room){
       this.svg = d3.select("figure#room")
         .append("svg")
